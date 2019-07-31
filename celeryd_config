@@ -1,0 +1,11 @@
+CELERYD_NODES=100
+CELERY_BIN="/usr/local/bin/celery"
+CELERY_APP="controller"
+CELERYD_CHDIR="/srv/Api-Celery/src/"
+CELERYD_OPTS=" -B -E -Ofair "
+CELERYD_LOG_LEVEL="DEBUG"
+CELERYD_LOG_FILE="/var/log/celery/info.log"
+CELERYD_PID_FILE="/var/run/celery/%n.pid"
+CELERYD_USER="celery"
+CELERYD_GROUP="celery" 
+CELERY_CREATE_DIRS=1

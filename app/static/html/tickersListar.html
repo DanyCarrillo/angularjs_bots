@@ -1,0 +1,210 @@
+<br><br>
+<div class="" style="margin: 0px;">
+      <!----------------------------------- Title ----------------------------------->
+    <div class="row">
+        <div class="col-12">
+     <div class="page-title">
+        <div class="col-md-4">
+        <div class="title_left">
+            <h3 id="title_general">Ticker's </h3>
+        </div>
+        </div>
+        <div class="col-md-4">
+         <div class="volumen">
+                    <label class="par" style="color: #2a3f54;font-family: 'ARIAL', serif; ">Volume: </label>
+                    <label style="margin-left: 50px;color:black; font-size: 18px;">{{volumen }}  </label>
+                    <label class="" style="margin-top:5px;color: #2a3f54; font-family: 'ARIAL', serif;">   BTC</label>
+        </div>
+        </div>
+
+        <div class="col-md-4">
+         <div class="title_right" >
+            <div class="col-md-12 col-sm-12 col-xs-12  pull-right top_search">
+
+                    <input type="text" class="form-control" ng-model="filterTickers" placeholder="Search">
+                    <span class="input-group-btn">
+                    </span>
+            </div>
+        </div>
+        </div> 
+</div>
+    </div>
+</div>
+    <!----------------------------------- End Title ----------------------------------->
+
+    <!----------------------------------- ROW ----------------------------------->
+        <div class="div_contenedor">
+                <table id="container" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Pairs</th>
+                            <th>Buy price</th>
+                            <th>Sell price</th>
+                            <th>Vol 24hr</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="activeCell {{$index}}" id="{{$index}}" ng-repeat="tick in tickers|filter:filterTickers track by $index" ng-show="$index<16" >
+                        <td><strong>{{tick.symbol}}</strong></td>
+                        <td id="buy" ><strong>{{tick.bid}}</strong></td>
+                        <td id="sell"><strong>{{tick.ask}}</strong></td>
+                        <td id="vol24">{{tick.volumen24hours}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table id="container" class="table table-hover ">
+                    <thead>
+                        <tr>
+                            <th>Pairs</th>
+                            <th>Buy price</th>
+                            <th>Sell price</th>
+                            <th>Vol 24hr</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="activeCell {{$index}}"  id="{{$index}}" ng-class="" ng-repeat="tick in tickers |filter:filterTickers track by $index" ng-show="$index>15 && $index<32" >
+                        <td ><strong>{{tick.symbol}}</strong></td>
+                        <td id="buy" ><strong>{{tick.bid}}</strong></td>
+                        <td id="sell"><strong>{{tick.ask}}</strong></td>
+                        <td id="vol24">{{tick.volumen24hours}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table  id="container" class="table table-hover ">
+                    <thead>
+                        <tr>
+                            <th>Pairs</th>
+                            <th>Buy price</th>
+                            <th>Sell price</th>
+                            <th>Vol 24hr</th>
+                        </tr>    
+                    </thead>
+                    <tbody>
+                    <tr class="activeCell {{$index}}"  id="{{$index}}"  ng-class="" ng-repeat="tick in tickers |filter:filterTickers track by $index" ng-show="$index>31 && $index<48" >
+                        <td><strong>{{tick.symbol}}</strong></td>
+                        <td id="buy" ><strong>{{tick.bid}}</strong></td>
+                        <td id="sell"><strong>{{tick.ask}}</strong></td>
+                        <td id="vol24">{{tick.volumen24hours}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table id="container"  class="table table-hover ">
+                    <thead>
+                        <tr>
+                            <th>Pairs</th>
+                            <th>Buy price</th>
+                            <th>Sell price</th>
+                            <th>Vol 24hr</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr id="{{tick.symbol}}" class="activeCell {{$index}}" ng-class="" ng-repeat="tick in tickers |filter:filterTickers track by $index" ng-show="$index>47 && $index<64" >
+                        <td ><strong>{{tick.symbol}}</strong></td>
+                        <td id="buy" ><strong>{{tick.bid}}</strong></td>
+                        <td id="sell"><strong>{{tick.ask}}</strong></td>
+                        <td id="vol24">{{tick.volumen24hours}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                 <table id="container"  class="table table-hover ">
+                    <thead>
+                        <tr>
+                            <th>Pairs</th>
+                            <th>Buy price</th>
+                            <th>Sell price</th>
+                            <th>Vol 24hr</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr id="{{$index}}" class="activeCell {{$index}}" ng-repeat="tick in tickers |filter:filterTickers track by $index" ng-show="$index>63 && $index<80" >
+                        <td ><strong>{{tick.symbol}}</strong></td>
+                        <td id="buy" ><strong>{{tick.bid}}</strong></td>
+                        <td id="sell"><strong>{{tick.ask}}</strong></td>
+                        <td id="vol24">{{tick.volumen24hours}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                 <table id="container"  class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Pairs</th>
+                            <th>Buy price</th>
+                            <th>Sell price</th>
+                            <th>Vol 24hr</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr id="{{$index}}"  class="activeCell {{$index}}" ng-class="" ng-repeat="tick in tickers |filter:filterTickers track by $index" ng-show="$index>79 && $index<96" >
+                        <td ><strong>{{tick.symbol}}</strong></td>
+                        <td id="buy" ><strong>{{tick.bid}}</strong></td>
+                        <td id="sell"><strong>{{tick.ask}}</strong></td>
+                        <td id="vol24">{{tick.volumen24hours}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                 <table id="container"  class="table table-hover" ng-show="$index>95 ? true:false">
+                    <thead>
+                        <tr>
+                            <th>Pairs</th>
+                            <th>Buy price</th>
+                            <th>Sell price</th>
+                            <th>Vol 24hr</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr id="{{$index}}"  class="activeCell {{$index}}" ng-repeat="tick in tickers |filter:filterTickers track by $index" ng-show="$index>95 && $index<112" >
+                        <td ><strong>{{tick.symbol}}</strong></td>
+                        <td id="buy" ><strong>{{tick.bid}}</strong></td>
+                        <td id="sell"><strong>{{tick.ask}}</strong></td>
+                        <td id="vol24">{{tick.volumen24hours}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                
+                 <table id="container"  class="table table-hover "ng-show="$index>111 ? true:false">
+                    <thead>
+                        <tr>
+                            <th>Pairs</th>
+                            <th>Buy price</th>
+                            <th>Sell price</th>
+                            <th>Vol 24hr</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr id="{{$index}}"  class="activeCell {{$index}}" ng-repeat="tick in tickers |filter:filterTickers track by $index" ng-show="$index>111 && $index<128" >
+                        
+                        <td ><strong>{{tick.symbol}}</strong></td>
+                        <td id="buy" ><strong>{{tick.bid}}</strong></td>
+                        <td id="sell"><strong>{{tick.ask}}</strong></td>
+                        <td id="vol24">{{tick.volumen24hours}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                
+                <table id="container"  class="table table-hover "ng-show="$index>127 ? true:false">
+                    <thead>
+                        <tr>
+                            <th>Pairs</th>
+                            <th>Buy price</th>
+                            <th>Sell price</th>
+                            <th>Vol 24hr</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr id="{{$index}}"  class="activeCell {{$index}}" ng-repeat="tick in tickers |filter:filterTickers track by $index" ng-show="$index>127 && $index<144" >
+                        <td ><strong>{{tick.symbol}}</strong></td>
+                        <td id="buy" ><strong>{{tick.bid}}</strong></td>
+                        <td id="sell"><strong>{{tick.ask}}</strong></td>
+                        <td id="vol24">{{tick.volumen24hours}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            <!-- </div> -->  
+        </div>
+</div>

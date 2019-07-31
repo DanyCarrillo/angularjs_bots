@@ -1,0 +1,75 @@
+.divCountries{
+    background-color: #2A3F54;
+    padding: 10px;
+    overflow: auto;
+    max-height: 100%;
+}
+.page-header{
+    color: #FFF;
+}
+.divPackages{
+    background-color: #2A3F54;
+    padding: 10px;
+    overflow: auto;
+    max-height: 100%;
+}
+th{
+    text-align: center;
+}
+td{
+    text-align: center;
+}
+.titlePackage{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+.scroll{
+    overflow: auto;
+    max-height: 300px;
+}
+.containerPackages{
+    margin-top: 80px;
+}
+.label-purple{
+    background-color: purple;
+}
+.titlePackages{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    color: white;
+}
+.divAddPackage{
+    font-size: 30px;
+    vertical-align: middle;
+    text-align: center;
+    margin-top: 12px;
+}
+.iconAddPackage{
+    cursor: pointer;
+}
+.modal-sm{
+    width: 300px;
+}
+.selectCoinModal{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.modal-btn-save{
+    margin-left: 40%;
+    margin-top: 10px;
+}
+.blue-sweet{
+    background-color: #40c4ff;
+    color: #FFF;
+}
+.angle-down{
+    font-size: 40px;   
+    margin: auto; 
+}
+.angle-down:hover{
+    cursor: pointer;
+}

@@ -1,0 +1,9 @@
+{
+    "IPBack": "http://172.16.0.48",
+    "port": "4000",
+    "endPoints": {
+        "user": "/user",
+        "blockUser":"/bloUser"
+        
+    }
+}

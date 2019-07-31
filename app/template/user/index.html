@@ -1,0 +1,10 @@
+{%extends 'base/base.html'%}
+
+{% block content%}
+	<div  class="right_col" role="main" data-ng-view>
+         
+    </div>
+{% endblock %}
+{% block jsModule%}
+	<script type="text/javascript" src="{{url_for('static',filename='js/user/user.js')}}" ></script>
+{% endblock %}

@@ -1,0 +1,5 @@
+*.pyc
+config.py
+.idea/
+celerybeat-schedule
+index.wsgi

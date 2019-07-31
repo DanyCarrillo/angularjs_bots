@@ -1,0 +1,158 @@
+<br><br>
+<div class="">
+    
+    <div class="page-title">
+        <div class="title_left">
+            <h3 class='azulTitle'>Order Book Administrator</h3>
+        </div>
+        <div class="title_right" >
+            <div class="col-md-6 col-sm-4 col-xs-2  pull-right top_search">
+
+                    <input type="text" class="form-control" ng-model="filterUsername" placeholder="Search username">
+                    <span class="input-group-btn">
+                    </span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="clearfix"></div>
+    
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+
+ 
+
+                <div class="x_content">
+                    
+                    <!-- BEGIN FILTROS -->
+                    <div class="row" ng-style="{'border-bottom':'2px solid #e2e2e2', 'padding-bottom':'16px'}">
+
+                        <!-- Begin Columna Filtros -->
+                        <div class="col-md-3 col-sm-3 col-xs-3">
+                            
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                    <label>Pair:</label>
+                                </div>
+                                <div class="col-md-8 col-sm-8 col-xs-8">
+                                    <center><select class="form-control" tabindex="10" ng-model="ngPair" ng-style="{'width':'90%', 'height':'25px', 'border-radius': '10px', 'padding': '0px 8px'}" ng-options="pair.idPair as pair.pair for pair in pairs track by pair.pair" ng-change="showOrderBookByPair(ngPair)">
+                                        <option value="" ng-disabled="true">-- Select --</option>
+                                    </select></center>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- End Columna Filtros -->
+
+
+                    </div>
+                    <!-- END FILTROS -->
+
+                    <!-- BEGIN TABLA ORDER BOOK --> 
+                    <div class="x_content">
+                        <div class="col-md-6" ng-style="{'padding-bottom':'1px','border-right':'1px solid #e2e2e2'}">
+                            <table class="table table-hover table-sm table-primary" ng-style="{'width':'100%'}">
+                            <!-- BEGIN Table Header -->
+                                <thead>
+                                    <tr>
+                                        <th><center>Username</center></th>
+                                        <th><center>Hours</center></th>
+                                        <th><center>Amount</th></center></th>
+                                        <th><center>Price</th></center></th>
+                                    </tr>
+                                </thead>
+                                <!-- END Table Header -->
+
+                                <!-- BEGIN Table Body -->
+                                <tbody>
+
+                                    <tr ng-repeat="ord in ngORDERS.buy |orderBy:'price':true |filter:filterUsername track by $index" repeat-done="{{$index}}" my-post-repeat-directive >
+                                        <!--<center><th ng-bind="b.general.idBot" scope="row"></th></center>-->
+                                        <td>
+                                            <center>
+                                                <span ng-bind="(ord.username=='')? '':ord.username" ng-class="(ord.flag==0)?'label label-success':'label label-danger'"></span>  
+                                            </center>  
+                                        </td>
+                                        <td> 
+                                            <center> 
+                                                <h5 ng-bind="(ord.hora=='')? '' : ord.hora" ></h5> 
+                                            </center>
+                                        </td>
+                                        <td> 
+                                            <center> 
+                                                <h5 ng-bind="(ord.amount=='')? '' : ord.amount" ></h5> 
+                                            </center>
+                                        </td>
+                                        <td>
+                                            <center> 
+                                                <h5 ng-bind="(ord.price=='')? '' : ord.price"></h5>
+                                            </center>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            <!-- END Table Body -->
+                            </table>
+                        </div>
+
+                        <div class="col-md-6">
+                            <table class="table table-hover table-sm table-primary" ng-style="{'width':'100%'}">
+                            <!-- BEGIN Table Header -->
+                                <thead>
+                                    <tr>
+                                        <th><center>Price</center></th>
+                                        <th><center>Amount</th></center></th>
+                                        <th><center>Hours</th></center></th>
+                                        <th><center>Username</center></th>
+                                    </tr>
+                                </thead>
+                                <!-- END Table Header -->
+
+                                <!-- BEGIN Table Body -->
+                                <tbody>
+
+                                    <tr ng-repeat="ord in ngORDERS.sell |orderBy:'price':false |filter:filterUsername track by $index" repeat-done="{{$index}}" my-post-repeat-directive >
+                                        <!--<center><th ng-bind="b.general.idBot" scope="row"></th></center>-->
+                                        <td>
+                                            <center> 
+                                                <h5 ng-bind="(ord.price=='')? '' : ord.price"></h5>
+                                            </center>
+                                        </td>
+                                        <td> 
+                                            <center> 
+                                                <h5 ng-bind="(ord.amount=='')? '' : ord.amount" ></h5> 
+                                            </center>
+                                        </td>
+                                        <td> 
+                                            <center> 
+                                                <h5 ng-bind="(ord.hora=='')? '' : ord.hora" ></h5> 
+                                            </center>
+                                        </td>
+                                        <td>
+                                            <center>
+                                                <span ng-bind="(ord.username=='')? '':ord.username" ng-class="(ord.flag==0)?'label label-success':'label label-danger'"></span>  
+                                            </center>  
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            <!-- END Table Body -->
+                            </table>
+                        </div>
+
+                    </div>
+                    <!-- END TABLA ORDER BOOK -->
+
+                    <!-- BEGIN LOADING -->
+                    <div class="col-md-12">
+                        <center>
+                            <i class="fa fa-spinner fa-spin" ng-style="waiting_orders==true?{'display':'inline-block','font-size':'150px'}:{'display':'none'}"></i>
+                        </center>
+                    </div>
+                    <!-- END LOADING -->
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

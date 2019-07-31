@@ -1,0 +1,1287 @@
+<button ng-click="bring_me_to_topWebPage()" id="Btn_top_webpage" title="Go to top">Top</button>
+<div class="">
+    <div>
+        <br><br>
+        <div>
+            <center>
+                <h3 class='azulTitle'>Administracion de Bots del trading</h3>
+            </center>      
+        </div>    
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+
+                <div class="x_title" ng-style="{'padding-bottom':'0px'}">
+                    <div class="row">
+
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <h2>Bots  <small>Permitidos para hacer trading en Bitinka</small></h2>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <div class="input-group form-group pull-right top_search">
+                                        <input type="text" class="form-control"  ng-model="filterBots" placeholder="Buscar bots">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" disabled type="button" ng-style="styleWeb">Buscar</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-1 col-sm-1 col-xs-1">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <label class='pull-right'>
+                                        <input type="checkbox" ng-click="onChangeSwitchAll()" id="swichVerBots" ng-model="switchVerTodos" class="js-switch"/> 
+                                    </label>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <span ng-style="{'color': 'white'}" class="pull-left" ng-bind="(switchVerTodos==true)?'Ver todos los bots':' Ver mis bots'" ng-class="(switchVerTodos==true)?'label label-default':'label label-info'"></span> 
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 col-sm-5 col-xs-5">
+                            <div class="row">
+
+                                <div class="col-md-10 col-sm-10 col-xs-10">
+                                    <center ng-style="{'margin-left':'10px'}">
+                                        <button type="button" class="btn btn-sm" ng-click="playAllBots()" ng-disabled="waiting_play[bots.indexOf(b)]" ng-style="{'background-color':'#2C6A3D','color':'white'}">
+                                            <i class="glyphicon glyphicon-play"></i>
+                                            Play All
+                                        </button>
+                                        <button type="button" class="btn btn-sm" ng-click="stopAllBots()" ng-disabled="waiting_play[bots.indexOf(b)]" ng-style="{'background-color':'#B94848','color':'white'}">
+                                            <i class="glyphicon glyphicon-stop"></i>
+                                            Stop All
+                                        </button>
+                                    </center>
+                                </div>
+
+                                <div class="col-md-2 col-sm-2 col-xs-2">
+                                    <button type="button" class="btn btn-round btn-primary btn-sm" data-toggle="{{ID_BITINKA>0? 'modal':''}}" data-target=".bs-example-modal-lg" ng-click="botModal('A')" ng-style="{'float':'right'}">
+                                        Crear Bots
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+
+                <!-- BEGIN PANEL SAM ALL BOTS -->
+                <div class="row">
+
+                    <!-- Begin Filtros -->
+                    <div class="col-md-2 col-sm-2 col-xs-2" ng-style="{'padding-bottom':'1px'}">
+                        
+                        <center><h5 ng-style="{'border-bottom':'1px solid #e2e2e2'}">Filters</h5></center>
+
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <center><h5 ng-style="{'margin-bottom':'4px'}"> User Exchange </h5></center>
+                                <center><select id="user_exchange" class="form-control" tabindex="10" ng-model="show_BotsByUsernameExchange" ng-style="{'max-width':'85%','border-radius': '10px','padding': '6px 6px'}" ng-change="filtroBotsPorUsernameExchange()">
+                                    <option value="" disabled>Select</option>
+                                    <option value="{{user.username}}" ng-repeat="user in users" ng-if="user.username.length>0">{{user.username}}</option>
+                                    <option value="AllBots">All Bots</option>
+                                </select></center>
+                            </div>
+                        </div>
+
+                        <div class="row" ng-style="{'padding-top':'10px'}">
+                            <div class="col-md-6 col-sm-6 col-xs-6" ng-style="{'padding-right':'0px','padding-left':'0px'}">
+                                <center><h5 ng-style="{'margin-bottom':'4px'}">Status</h5></center>
+                                <center><select class="form-control" tabindex="10" ng-model="show_BotsByState" ng-style="{'max-width':'85%','border-radius': '10px','padding': '6px 6px'}" ng-change="filtroBotsPorEstado()">
+                                    <option value="" ng-disabled="true">Select</option>
+                                    <option value="show_plays">Active</option>
+                                    <option value="show_stops">Inactive</option>
+                                    <option value="show_all">All Status</option>
+                                </select></center>
+                            </div>
+
+                            <div class="col-md-6 col-sm-6 col-xs-6" ng-style="{'padding-right':'0px','padding-left':'0px'}">
+                                <center><h5 ng-style="{'margin-bottom':'4px'}">Bots Type</h5></center>
+                                <center><select class="form-control" tabindex="10" ng-model="show_BotsByType" ng-style="{'max-width':'85%','border-radius': '10px','padding': '6px 6px'}" ng-change="filtroBotsPorTipo()">
+                                    <option value="" disabled>Select</option>
+                                    <option value="{{bot_type.name}}" ng-repeat="bot_type in bottypes" ng-if="bot_type.idBotType.length>0">{{bot_type.name}}</option>
+                                    <option value="AllBots">All Types</option>
+                                </select></center>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- End Filtros -->
+
+
+                    <!-- Begin Config Bots Configurations -->
+                    <div class="col-md-6 col-sm-6 col-xs-6" ng-style="{'padding-bottom':'1px','border-right':'1px solid #e2e2e2','border-left':'1px solid #e2e2e2'}">
+
+                        <center><h5 ng-style="{'border-bottom':'1px solid #e2e2e2'}">Bot's Configurations</h5></center>
+
+                        <div class="row">
+
+                            <!-- Begin Type -->
+                            <div class="col-md-2 col-sm-2 col-xs-2">
+
+                                <center><h5 ng-style="{'margin-bottom':'18px','border-bottom':'1px solid #e2e2e2'}">Percent/Unit:</h5></center>
+
+                                <div class="row">                                            
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <center><label ng-style="{'padding-top':'7px'}">[%]</label></center>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <center><input class="form-control" type="radio" id="porcentual" name="valPU" value="porcentual" ng-style="{'width':'20px','height':'20px','margin-top':'8px'}" checked="checked"></center>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <center><label ng-style="{'padding-top':'7px'}">[u]</label></center>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <center><input class="form-control" type="radio" id="unitario" name="valPU" value="unitario" ng-style="{'width':'20px','height':'20px','margin-top':'8px'}"></center>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- End Type --> 
+
+                            <!-- Begin Spread -->
+                            <div class="col-md-3 col-sm-4 col-xs-4">
+                                
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <center><h5 ng-style="{'border-bottom':'1px solid #e2e2e2','margin-bottom':'18px'}">Spread</h5></center>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                        <div class="row">
+                                            
+                                            <div class="col-md-5 col-sm-5 col-xs-5">
+                                                <center><label ng-style="{'padding-right':'0px','padding-top':'7px'}">Buy:</label></center>
+                                            </div>
+                                            <div class="col-md-7 col-sm-7 col-xs-7">
+                                                <center><input name="BotConfiguration_All" class="form-control" type="text" ng-model="all_BuySpread" ng-style="{'border-radius': '10px'}"></center>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                        <div class="row">
+                                            <div class="col-md-5 col-sm-5 col-xs-5">
+                                                <center><label ng-style="{'padding-right':'0px','padding-top':'7px'}">Sell:</label></center>
+                                            </div>
+                                            <div class="col-md-7 col-sm-7 col-xs-7">
+                                                <center><input name="BotConfiguration_All" class="form-control" type="text" ng-model="all_SellSpread" ng-style="{'border-radius': '10px'}"></center>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <!-- End Spread -->
+
+                            <!-- Begin Cancellation -->
+                            <div class="col-md-3 col-sm-3 col-xs-3">
+                                
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <center><h5 ng-style="{'border-bottom':'1px solid #e2e2e2','margin-bottom':'18px'}">Cancellation</h5></center>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                        <div class="row">
+                                            
+                                            <div class="col-md-5 col-sm-5 col-xs-5">
+                                                <center><label ng-style="{'padding-right':'0px','padding-top':'7px'}">Purchase:</label></center>
+                                            </div>
+                                            <div class="col-md-7 col-sm-7 col-xs-7">
+                                                <center><input name="BotConfiguration_All" class="form-control" type="text" ng-model="all_cancelPurchase" ng-style="{'border-radius': '10px'}"></center>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                        <div class="row">
+                                            <div class="col-md-5 col-sm-5 col-xs-5">
+                                                <center><label ng-style="{'padding-right':'0px','padding-top':'7px'}">Sale:</label></center>
+                                            </div>
+                                            <div class="col-md-7 col-sm-7 col-xs-7">
+                                                <center><input name="BotConfiguration_All" class="form-control" type="text" ng-model="all_cancelSale" ng-style="{'border-radius': '10px'}"></center>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <!-- End Cancellation-->
+
+                            <!-- Begin Amount -->
+                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <center><h5 ng-style="{'border-bottom':'1px solid #e2e2e2','margin-bottom':'18px'}">Amount</h5></center>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                        <div class="row">
+                                            
+                                            <div class="col-md-5 col-sm-5 col-xs-5">
+                                                <center><label ng-style="{'padding-right':'0px','padding-top':'7px'}">Min:</label></center>
+                                            </div>
+                                            <div class="col-md-7 col-sm-7 col-xs-7">
+                                                <center><input name="BotConfiguration_All" class="form-control" type="text" ng-model="all_minAmount" ng-style="{'border-radius': '10px'}"></center>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                        <div class="row">
+                                            <div class="col-md-5 col-sm-5 col-xs-5">
+                                                <center><label ng-style="{'padding-right':'0px','padding-top':'7px'}">Max:</label></center>
+                                            </div>
+                                            <div class="col-md-7 col-sm-7 col-xs-7">
+                                                <center><input name="BotConfiguration_All" class="form-control" type="text" ng-model="all_maxAmount" ng-style="{'border-radius': '10px'}"></center>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <!-- End Amount-->
+
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <center>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary" ng-click="NotifyApplyAll('Bots',all_BuySpread,all_SellSpread,all_cancelPurchase,all_cancelSale,all_minAmount,all_maxAmount,all_executeTime,all_altExecuteTime,all_altBuySpread,all_altSellSpread)" ng-style="{'border-top-left-radius':'16px','border-bottom-left-radius':'16px'}" ng-disabled="waiting_bots">
+                                            Apply
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" ng-click="resetAlternativesAll()" ng-style="{'border-top-right-radius':'16px','border-bottom-right-radius':'16px'}" ng-disabled="waiting_bots">
+                                            Reset
+                                        </button>
+                                    </div>
+                                <center>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- Begin Config Bots Configurations -->
+
+                    <!-- Begin Config Bots Play -->
+                    <div class="col-md-4 col-sm-4 col-xs-4" ng-style="{'padding-bottom':'1px'}">
+
+                        <center><h5 ng-style="{'border-bottom':'1px solid #e2e2e2'}">Bot's Play</h5></center>
+
+                        <div class="row">
+
+                            <!-- Begin Alt. Times -->
+                            <div class="col-md-4 col-sm-4 col-xs-4">
+
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <center><h5 ng-style="{'border-bottom':'1px solid #e2e2e2','margin-bottom':'18px'}">Alt. Times</h5></center>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                        <div class="row">
+                                            
+                                            <div class="col-md-5 col-sm-5 col-xs-5">
+                                                <center><label ng-style="{'padding-right':'0px','padding-top':'7px'}">Execute:</label></center>
+                                            </div>
+                                            <div class="col-md-7 col-sm-7 col-xs-7">
+                                                <center><input name="BotPlay_All" class="form-control" type="text" ng-model="all_executeTime" ng-style="{'border-radius': '10px'}"></center>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                        <div class="row">
+                                            <div class="col-md-5 col-sm-5 col-xs-5">
+                                                <center><label ng-style="{'padding-right':'0px','padding-top':'7px'}">AltExec:</label></center>
+                                            </div>
+                                            <div class="col-md-7 col-sm-7 col-xs-7">
+                                                <center><input name="BotPlay_All" class="form-control" type="text" ng-model="all_altExecuteTime" ng-style="{'border-radius': '10px'}"></center>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- End Alt. Times -->
+
+                            <!-- Begin Alt. Spread -->
+                            <div class="col-md-4 col-sm-4 col-xs-4">
+
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <center><h5 ng-style="{'border-bottom':'1px solid #e2e2e2','margin-bottom':'18px'}">Alt. Spread</h5></center>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                        <div class="row">
+                                            
+                                            <div class="col-md-5 col-sm-5 col-xs-5">
+                                                <center><label ng-style="{'padding-right':'0px','padding-top':'7px'}">Buy:</label></center>
+                                            </div>
+                                            <div class="col-md-7 col-sm-7 col-xs-7">
+                                                <center><input name="BotPlay_All" class="form-control" type="text" ng-model="all_altBuySpread" ng-style="{'border-radius': '10px'}"></center>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                        <div class="row">
+                                            <div class="col-md-5 col-sm-5 col-xs-5">
+                                                <center><label ng-style="{'padding-right':'0px','padding-top':'7px'}">Sell:</label></center>
+                                            </div>
+                                            <div class="col-md-7 col-sm-7 col-xs-7">
+                                                <center><input name="BotPlay_All" class="form-control" type="text" ng-model="all_altSellSpread" ng-style="{'border-radius': '10px'}"></center>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- End Alt. Spread -->
+
+                            <!-- Begin Order Type -->
+                            <div class="col-md-4 col-sm-4 col-xs-4">
+
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <center><h5 ng-style="{'border-bottom':'1px solid #e2e2e2','margin-bottom':'18px'}">Order Type</h5></center>
+                                    </div>
+                                </div>
+
+                                <div class="row" ng-style="{'margin-top':'17px'}">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <center><select class="form-control" size="1" ng-model="orderTypeAllBots" ng-change="selectOrderTypeAllBots()" ng-style="{'max-width':'80%','border-radius': '10px','padding': '6px 6px'}">
+                                            <option value="" ng-disabled="true">Select</option>
+                                            <option value="buy">Compra</option>
+                                            <option value="sell">Venta</option>
+                                            <option value="both">Ambos</option>
+                                        </select></center>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- End Order Type -->
+
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <center>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary" ng-click="NotifyApplyAll('Plays',all_BuySpread,all_SellSpread,all_cancelPurchase,all_cancelSale,all_minAmount,all_maxAmount,all_executeTime,all_altExecuteTime,all_altBuySpread,all_altSellSpread)" ng-style="{'border-top-left-radius':'16px','border-bottom-left-radius':'16px'}" ng-disabled="waiting_bots">
+                                            Apply
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" ng-click="resetAlternativesAll()" ng-style="{'border-top-right-radius':'16px','border-bottom-right-radius':'16px'}" ng-disabled="waiting_bots">
+                                            Reset
+                                        </button>
+                                    </div>
+                                <center>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- End Config Bots Play -->
+
+                    
+
+                </div>
+                <!-- END PANEL SAM ALL BOTS -->
+
+                <label ng-if="(all_executeTime<=0 && all_executeTime!='') || (all_altExecuteTime<=0 && all_altExecuteTime!='')" ng-style="{'float':'right','color':'red'}">
+                    * Time values should be positives.
+                </label>
+
+                <hr ng-style="{'margin-top':'10px','margin-bottom':'10px'}">
+
+                <!-- BEGIN TABLA BOTS CONFIGURATIONS --> 
+                <div class="x_content">
+
+                    <table class="table table-hover table-sm table-primary" ng-style="{'width':'100%'}"> <!--ng-if="waiting_bots==false">-->
+
+                        <!-- BEGIN Table Header -->
+                        <thead>
+                            <tr>
+                                <th ng-repeat="cabecera_1 in cabeceraTabla_1" ng-style="{'text-align':'center'}" ng-bind="cabecera_1"></th>
+                                <th ng-style="{'text-align':'center'}">Spread<br>Buy / Sell</th>
+                                <th ng-style="{'text-align':'center'}">Cancellation<br>Buy / Sell</th>
+                                <th ng-repeat="cabecera_2 in cabeceraTabla_2" ng-style="{'text-align':'center'}" ng-bind="cabecera_2"></th>
+                            </tr>
+                        </thead>
+                        <!-- END Table Header -->
+
+                        <!-- BEGIN Table Body -->
+                        <tbody>
+                            <tr ng-repeat="b in (bots_filtrados = (bots  | filter:filterBots | filter:stateBots | filter: usernameExchange | filter: botType)) track by $index" repeat-done="{{$index}}" bot="{{b.general.idBot}}" my-post-repeat-directive >
+                                <center><th ng-bind="b.general.idBot" scope="row"></th></center>
+                                <td>
+                                    <center>
+                                        <span ng-bind="b.general.exchangeUsername" class="label label-success"></span>  
+                                    </center>  
+                                </td>
+                                <td> 
+                                    <center> 
+                                        <h5 ng-bind="b.bot.pair" ></h5> 
+                                    </center>
+                                </td>
+                                <td> 
+                                    <center> 
+                                        <h5 ng-bind="b.general.buySpread" ></h5> 
+                                        <h5 ng-bind="b.general.sellSpread" ></h5> 
+                                    </center>
+                                </td>
+                                <td> 
+                                    <center> 
+                                        <h5 ng-bind="b.general.buyPercent" ></h5> 
+                                        <h5 ng-bind="b.general.sellPercent" ></h5> 
+                                    </center>
+                                </td>
+                                <td>
+                                    <center> 
+                                        <h5 ng-bind="b.general.minAmount | number:8"></h5>
+                                        <h5 ng-bind="b.general.maxAmount | number:8"></h5>
+                                    </center>
+                                </td>
+                                <td colspan="1">
+                                    <select  ng-model='b.play.orderType' class="form-control" size="1">
+                                        <option value="" ng-disabled="true">Select</option>
+                                        <option value="buy">Compra</option>
+                                        <option value="sell">Venta</option>
+                                        <option value="both">Ambos</option>
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <center>
+                                        <div class="btn-group">
+                                            <button type="button" id="btn_alternatives1_{{b.general.idBot}}" class="btn btn-primary btn-md" ng-click="btn_alternatives(b.general.idBot)" ng-style="styleWeb">
+                                                <i class="glyphicon glyphicon-list-alt"></i>
+                                            </button>
+                                            <button type="button" id="btn_alternatives2_{{b.general.idBot}}" class="btn btn-primary btn-md" ng-bind="(b.general.executeTime>0 && b.play.altExecuteTime>0?b.general.executeTime+'s / '+b.play.altExecuteTime+'s / ' + b.play.altBuySpread + '% / ' + b.play.altSellSpread + '%':'Alternatives')">
+                                            </button>
+                                        </div>
+                                    </center>
+                                </td>
+                                <td>
+                                    <center>
+                                        <button type="button" ng-style="{'background-color':'transparent'}" ng-click="clickBtn_PlayStop() ; (b.play.idBotPlay==null || b.play.status==2)? addPlay(bots.indexOf(b),b.play,b.general.executeTime) : updPlay(bots.indexOf(b),b.play,b.general.executeTime)" ng-disabled="waiting_play[bots.indexOf(b)]">
+                                            
+                                            <i class="fa fa-play fa-2x" ng-class="(b.play.idBotPlay==null || b.play.status==2)? 'fa-play colorPlay' : 'fa-stop colorStop'" ng-style="waiting_play[bots.indexOf(b)]==false?{'display':'inline-block'}:{'display':'none'}" ng-mouseover="(b.play.idBotPlay==null || b.play.status==2)?hoverPlay():hoverTradin(bots.indexOf(b))" ng-mouseleave="hoverTradinD()"></i>
+                                            
+                                            <i class="fa fa-spinner fa-spin" ng-style="waiting_play[bots.indexOf(b)]==true?{'display':'inline-block','font-size':'25px'}:{'display':'none'}"></i>
+
+                                        </button>
+                                    </center>
+                                </td>
+                                <td>
+                                    <center>
+                                        <a class="btn btn-default" data-toggle="modal" ng-click="(waiting_cycle[$index]==false) ? gestinarListPlay($index,b.general.idBot, bots.indexOf(b)) : ''" ng-disabled="waiting_cycle[$index]">
+                                            <span ng-if="(b.noti>0)" class="badge bg-red" value="" ng-bind="b.noti"></span>
+                                            <i class="fa fa-bullhorn" ng-style="waiting_cycle[$index]==true? {'display':'none'} : {'vertical-align':'middle'}"></i> 
+
+                                            <i class="fa fa-spinner fa-spin" ng-style="waiting_cycle[$index]==true? {'display':'inline-block','font-size':'25px'} : {'display':'none'}"></i>
+
+                                            <br>View
+                                         </a>
+                                    </center>
+                                </td>
+
+                                <td>
+                                    <center>
+                                        <button class="btn btn-primary" ng-style="styleWeb" data-toggle="modal" ng-click="showActiveOrders($index,b.general.idBot,b.bot.pair,b.general.idBotType)">
+                                            <i class="glyphicon glyphicon-bitcoin" ng-style="waiting_order[$index]==true? {'display':'none'} : {'vertical-align':'middle'}"></i>
+
+                                            <i class="fa fa-spinner fa-spin" ng-style="waiting_order[$index]==true? {'display':'inline-block','font-size':'25px'} : {'display':'none'}"></i>
+
+                                            <br>Orders
+                                        </button>
+                                    </center>
+                                </td>
+                                
+                                <td>
+                                    <center>
+                                        <button ng-click="botModal('M',b,bots.indexOf(b))" type="button" data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-warning btn-xs" ng-style="waiting_editar[bots.indexOf(b)]==true? {'display':'none','height':'25px', 'width':'50px'} : {'vertical-align':'middle','height':'25px', 'width':'50px'}">Editar</button>
+
+                                        <button class="btn btn-warning btn-xs" ng-style="waiting_editar[bots.indexOf(b)]==true? {'display':'inline-block','font-size':'10px','height':'25px', 'width':'50px'} : {'display':'none','height':'25px', 'width':'50px'}">
+                                            <i class="fa fa-spinner fa-spin" ng-style="waiting_editar[bots.indexOf(b)]==true? {'display':'inline-block','font-size':'15px'} : {'display':'none'}"></i>
+                                        </button>
+                                    </center>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                        <!-- END Table Body -->
+
+                    </table>
+
+                    <div class="col-md-12">
+                        <center>
+                            <i class="fa fa-spinner fa-spin" ng-style="waiting_bots==true?{'display':'inline-block','font-size':'150px'}:{'display':'none'}"></i>
+                        </center>
+                    </div>
+                    <div class="col-md-12">
+                        <center>
+                            <pagination  arreglo="bots" data="informacion"  current="current" topindex="4" totalresult="50" actual="botsO" filter="buscar"></pagination>
+                        </center>                          
+                    </div>
+
+                    <!-- BEGIN PAGINADOR -->
+                    <div class="col-md-12" align="right">
+                        <nav aria-label="Page Navigation Bots">
+                            <ul class="pagination">
+
+                                <!-- Begin Boton Abajo
+                                <li class="page-item">
+                                    <a class="page-link" href="" id="Btn_UpBots" ng-style="{'background-color':'#2A3F54','color':'white'}" ng-click="paginas_bots = paginas_bots-1; viewBotsPage(paginas_bots,'LEFT')" ng-if="!inac_pagIzq">
+                                        <i class="glyphicon glyphicon-chevron-up" ng-style="{'font-size':'25px'}"></i>
+                                    </a>
+                                </li>
+                                End Boton Anterior --> 
+
+                                <!-- Begin Boton Posterior
+                                <li class="page-item">
+                                    <a class="page-link" href="" id="Btn_DownBots" ng-style="{'background-color':'#2A3F54','color':'white'}" ng-click="paginas_bots = paginas_bots+1; viewBotsPage(paginas_bots,'RIGHT')" ng-if="!inac_pagDer">
+                                        <i class="glyphicon glyphicon-chevron-down" ng-style="{'font-size':'25px'}"></i>
+                                    </a>
+                                </li>
+                                End Boton Posterior --> 
+
+                                <!-- Begin Boton Anterior
+                                <li class="page-item">
+                                    <a class="page-link" href="" ng-style="{'background-color':'#2A3F54','color':'white'}" ng-click="paginas_bots = paginas_bots-1; viewBotsPage(paginas_bots)" ng-if="!inac_pagIzq">
+                                        <i class="glyphicon glyphicon-chevron-left" ng-style="{'font-size':'25px'}"></i>
+                                    </a>
+                                </li>
+                                End Boton Anterior --> 
+
+                                <!-- Begin Boton Posterior
+                                <li class="page-item">
+                                    <a class="page-link" href="" ng-style="{'background-color':'#2A3F54','color':'white'}" ng-click="paginas_bots = paginas_bots+1; viewBotsPage(paginas_bots)" ng-if="!inac_pagDer">
+                                        <i class="glyphicon glyphicon-chevron-right" ng-style="{'font-size':'25px'}"></i>
+                                    </a>
+                                </li>
+                                End Boton Posterior --> 
+
+                            </ul>
+                        </nav>
+                    </div>
+                    <!-- END PAGINADOR -->
+
+                </div>
+                <!-- END TABLA BOTS CONFIGURATIONS -->
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- BEGIN MODAL EXAMPLE -->
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- BEGIN MODAL HEADER -->
+            <div class="modal-header" ng-style="styleWeb">
+                <button type="button" class="close" id="closeModalBots" data-dismiss="modal" ng-style="{'color':'white'}">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <div class="row">
+                    <div class="col-md-5 col-sm-5 col-xs-5 form-group has-feedback">
+                        <h4 class="modal-title" ng-bind="modalTitle" id="myModalLabel" ng-style="{'color':'white'}"></h4>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3 form-group has-feedback">
+                        <i ng-style="{'color':'#1de9b6'}" class="fa fa-android  fa-2x fa-fw"></i>
+                        <i ng-style="{'color':'#bdbdbd','animation':'fa-spin 2s linear'}" class="fa fa-exchange fa-spin fa-2x fa-fw"></i>
+                        <i ng-style="{'color':'#9fa8da'}" class="fa fa-android  fa-2x fa-fw"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- END MODAL HEADER -->
+
+            <!-- BEING MODAL BODY -->
+            <div class="modal-body">
+                <div class="x_panel">
+                    <div class="x_content">
+
+                        <!-- BEGIN FORMULARIO -->
+                        <form class="form-horizontal form-label-left input_mask">
+                            <div class="row">
+
+                                <!-- Begin Exchange with Select Pair -->
+                                <div class="col-md-5 col-sm-5 col-xs-5" ng-style="{'border-right':'1px solid #e5e5e5'}">
+
+                                    <div class="row" align="center">
+                                        <h1 ng-bind="ngExchange.general.name.length>0? ngExchange.general.name:'Exchange'"></h1>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <label class="control-label">Users</label>
+                                            <select ng-disabled="isDisabled_usersSelect" class="form-control" ng-model="ngUser.idUser" ng-change="" ng-options="user.idUser as user.username for user in users" tabindex="100">
+                                                <option value="" selected disabled>---Select---</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <label class="control-label">Pairs</label>
+                                            <select id="select_pairs" ng-disabled="(isDisabled_usersSelect==true)? true:false" class="form-control" ng-model="ngPair.idPair" ng-change="[selMarketPricesExchange(ngPair.idPair),selPairTypeCoins(ngPair.idPair),cleanAmounts()]" ng-options="pair.idPair as pair.pair for pair in pairs" tabindex="100">
+                                                <option value="" selected disabled>---Select---</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <label class="control-label">Bot type</label>
+                                            <select class="form-control" ng-model="ngBot.idBotType" ng-options="bottype.idBotType as bottype.name for bottype in bottypes" tabindex="100">
+                                                <option value="" selected disabled>---Select---</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <label class="control-label">Trading Types</label>
+                                            <select class="form-control" ng-model="ngBot.idTradingType" ng-options="tt.idTradingType as tt.name for tt in tradingtypes" tabindex="100">
+                                                <option value="" selected disabled>---Select---</option>
+                                            </select>
+                                        </div>
+                                        
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <label class="control-label">% Buy's Spread:</label>
+                                            
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-indent-right"></i></span>
+                                                <input type="number" step="any" class="form-control" ng-model='ngBot.buySpread' placeholder="% Spread [0-100]" ng-style="{'width':'95%'}" min="-100" max="100">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-xs btn-success" id="btn_BuyVar" ng-click="btn_BuyVar('show')" ng-disabled="(ngBot.buySpread==null)?true:false">Calculate</button>
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <label class="control-label">% Sell's Spread:</label>
+                                            <div class="input-group input-group-md mb-3">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-indent-left"></i></span>
+                                                <input type="number" step="any" class="form-control" ng-model="ngBot.sellSpread" placeholder="% Spread [0-100]"  ng-style="{'width':'95%'}" min="-100" max="100">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-xs btn-success" id="btn_SellVar" ng-click="btn_SellVar('show')" ng-disabled="(ngBot.sellSpread==null)?true:false">Calculate</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <label class="control-label">%Cancellation purchase:</label>
+                                            <input type="number" step="any" class="form-control" ng-model="ngBot.buyPercent" placeholder="% Buy Percent" min="0" max="100" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode==46)">
+                                        </div>
+
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <label class="control-label">%Cancellation sale:</label>
+                                            <input type="number" step="any" class="form-control" ng-model='ngBot.sellPercent' placeholder="% Sell Percent" min="0" max="100" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode==46)">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <label class="control-label">Min. Cripto Trading:</label>
+                                            <input type="number" class="form-control" ng-model="ngBot.minAmount" ng-change="convertCurrency('min',ngBot.minAmount,'CRYP', ngPriceMarket.buyMarketPrice)" placeholder="Min BTC trading">
+                                        </div>
+
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <label class="control-label">Max. Cripto Trading:</label>
+                                            <input type="number" class="form-control" ng-model='ngBot.maxAmount' ng-change="convertCurrency('max',ngBot.maxAmount,'CRYP', ngPriceMarket.buyMarketPrice)" placeholder="Max BTC trading">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <label class="control-label">Min. USD Convert:</label>
+                                            <input type="number" class="form-control" ng-model="ngBot.minUSD" ng-change="convertCurrency('min',ngBot.minUSD,'USD', ngPriceMarket.buyMarketPrice)" placeholder="Min USD convert">
+                                        </div>
+
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <label class="control-label">Max. USD Convert:</label>
+                                            <input type="number" class="form-control" ng-model='ngBot.maxUSD' ng-change="convertCurrency('max',ngBot.maxUSD,'USD', ngPriceMarket.buyMarketPrice)" placeholder="Max USD convert">
+                                        </div>
+                                    </div>
+
+                                    <br>
+
+                                    <div class="row" ng-show='modificando'>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div class="pull-right">
+                                                <span class="pull-left" ng-bind="(switchStatus==false)?'Inactiva':'Activa'" ng-class="(switchStatus==false)?'label label-warning':'label label-info'"></span>
+                                                <label><input type="checkbox" id="swich1" ng-model="switchStatus" class="js-switch"/></label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- End Exchange with Select Pair -->
+
+                                <!-- Begin Details -->
+                                <div class="col-md-7 col-sm-7 col-xs-7">
+
+                                    <div class="row">
+                                        <!-- Begin Precios -->
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6 col-xs-6" ng-style="{'border-right':'1px solid #e5e5e5'}">
+                                                    <center>
+                                                        <label>External buy Price:</label>
+                                                        <br>
+                                                        <i class="fa fa-spinner fa-spin" ng-style="waiting==true?{'display':'inline-block','font-size':'32px'}:{'display':'none'}"></i>
+                                                        <h4 ng-style="waiting==false?{'display':'inline-block'}:{'display':'none'}" ng-bind="ngPriceMarket.buyMarketPrice"></h4>
+                                                    </center>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                                    <center>
+                                                        <label>External sell Price:</label>
+                                                        <br>
+                                                        <i class="fa fa-spinner fa-spin" ng-style="waiting==true?{'display':'inline-block','font-size':'30px'}:{'display':'none'}" align='right'></i>
+                                                        <h4 ng-style="waiting==false?{'display':'inline-block'}:{'display':'none'}" ng-bind="ngPriceMarket.sellMarketPrice"></h4>
+                                                    </center>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- End Precios -->
+                                    </div>
+                                                                
+                                    <div class="ln_solid"></div>
+
+                                    <div class="row">
+                                        <!-- Begin Crypto -->
+                                         <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <center><label>Exchange Details</label><br><br></center>
+                                            <label>Name:</label><a ng-bind="ngExchangeByPair.general.name"></a><br>
+                                            <label>Type:</label><a ng-bind="ngExchangeByPair.general.type=='I'?'Internal':'External'"></a><br>
+                                                <label>Priority:</label><a ng-bind="ngExchangeByPair.general.priority"></a><br>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 col-xs-6" ng-style="{'border-left':'1px solid #e5e5e5'}">
+                                            <center><label>Crypto Price Details</label><br><br></center>
+                                            <label>idCryptoPrice:</label><a ng-bind="ngPriceMarket.idCryptoPrice"></a><br>
+                                            <label>idPair:</label><a ng-bind="ngPriceMarket.idPair"></a><br>
+                                            <label>Pair:</label><a ng-bind="ngPriceMarket.pair"></a><br>
+                                            <label>Status:</label><a ng-bind="ngPriceMarket.status"></a><br>
+                                            <label>Type Calcule:</label><br><a ng-bind="ngPriceMarket.typeCalcule"></a><br>
+                                        </div>
+                                        <!-- End -->
+
+                                    </div>
+                                </div>
+                                <!-- End Details -->
+
+                            </div>
+                        </form>
+                        <!-- END FORMULARIO -->
+
+                    </div>
+                </div>
+            </div>
+            <!-- END MODAL BODY -->
+
+            <!-- BEGIN MODAL FOOTER -->
+            <div class="modal-footer" ng-style="styleWeb">
+                <button ng-click="(modificando)?updBot():addBot()" type="button" class="btn btn-primary" ng-disabled="(ngBot.minAmount>0 && ngBot.maxAmount>0)?false:true">Save</button>
+            </div>
+            <!-- END MODAL FOOTER -->
+
+        </div>
+    </div>
+</div>
+<!-- END MODAL EXAMPLE -->
+
+
+<!-- BEGIN MODAL COMPLETE ORDERS -->
+<div id="ordersModal" class="modal fade bs-orders-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- BEGIN MODAL HEADER -->
+            <div class="modal-header" ng-style="styleWeb">
+                <button type="button" class="close" id="closeModalBots" data-dismiss="modal" ng-style="{'color':'white'}">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <div class="row">
+                    <div class="col-md-5 col-sm-5 col-xs-5 form-group has-feedback">
+                        <h4 class="modal-title" ng-style="{'color':'white'}">List of Active Orders</h4>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3 form-group has-feedback">
+                        <i ng-style="{'color':'#1de9b6'}" class="fa fa-android  fa-2x fa-fw"></i>
+                        <i ng-style="{'color':'#bdbdbd','animation':'fa-spin 2s linear'}" class="fa fa-exchange fa-spin fa-2x fa-fw"></i>
+                        <i ng-style="{'color':'#9fa8da'}" class="fa fa-android  fa-2x fa-fw"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- END MODAL HEADER -->
+
+            <!-- BEING MODAL BODY -->
+            <div class="modal-body">
+                <div class="x_panel">
+                    <div class="x_content">
+
+                        <!-- BEGIN FORMULARIO -->
+                        <form class="form-horizontal form-label-left input_mask">
+
+                            <div class="row">
+                                <div class="col-sm-6 col-md-6 col-xs-6">
+                                    <h3>Active Orders</h3>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-xs-3">
+                                    <label>Select All
+                                        <input type="checkbox" class="selectAllChecks" ng-model="check_all" ng-change="check_decheck_all($event)">
+                                    </label>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-xs-3" align="right">
+                                    <button type="button" class="btn btn-danger" ng-click="cancelOrders()"align="right">Cancel Orders</button>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+
+                             <div class="col-md-6 col-sm-6 col-xs-6">
+
+                                    <div class="panel panel-default" ng-style="{'width':'80%','border-radius':'10px'}">
+                                        <table class="table table-bordered">
+                                            <thead ng-style="styleWeb">
+                                                <tr ng-style="{'color':'#FFFFFF'}">
+                                                    <th><center>idBot</center></th>
+                                                    <th><center>Username</center></th>
+                                                    <th><center>#Active Orders</center></th>
+                                                </tr>    
+                                            </thead>
+                                            <tbody>
+                                                <tr scope="row">
+                                                    <td><center>{{dataBot.general.idBot}}</center></td>
+                                                    <td><center>{{dataBot.general.exchangeUsername}}</center></td>
+                                                    <td><center>{{activeOrders.length}}</center></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+
+                                <center><h5 ng-style="{'margin-bottom':'18px','border-bottom':'1px solid #e2e2e2'}">Filter prices:</h5></center>
+
+                                <div class="row">                                            
+                                    <div class="col-md-12 col-sm-12 col-xs-12">       
+
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <input name="" ng-model="filterPrice" ng-change="campoPrice()" class="form-control" type="text" ng-model="" ng-style="{'border-radius': '10px'}" placeholder="Price">
+                                        </div>
+
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <select ng-model="tipoFiltro" ng-change="filtros(filterPrice,tipoFiltro)"class="form-control ng-untouched ng-valid ng-empty ng-dirty ng-valid-parse" ng-style="{'max-width':'80%','border-radius': '10px','padding': '6px 6px'}">
+                                                <option value="" selected disabled>Select</option>
+                                                <option value="mayor">Greater than</option>
+                                                <option value="menor">Smaller than</option>
+                                                <option value="salir">Exit filter</option>
+                                            </select>
+                                        </div>
+                                    </div>    
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                            <table class="table table-hover" ng-if="waiting_modal==false">
+
+                                <thead>
+                                    <tr ng-style="{'display':'block'}">
+                                        <th ng-repeat="h in headOrders" ng-style="{'text-align':'center','width':h.width}">
+                                            <label ng-click="reorderRows(h.value)">
+                                                {{h.value}}
+                                                <span ng-class="(order_reverse[h.value]==true)? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom'" ng-if="h.value!='#' && h.value!='Pair' && h.value!='Check'"></span>
+                                            </label>
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody ng-style="{'display':'block','height':'500px','overflow':'auto'}">
+                                    <tr scope="row" ng-repeat="ao in activeOrders | orderBy:headerOrder:order_reverse_flag">
+                                        <td ng-style="{'width':'20px'}"><center>{{$index+1}}</center></td>
+                                        <td ng-style="{'width':'90px'}"><center>{{ao['order_id']}}</center></td>
+                                        <td ng-style="{'width':'60px'}"><center>{{ao['fromCurrency']}}/{{ao['toCurrency']}}</center></td>
+                                        <td ng-style="{'width':'60px'}"><center>{{ao['Type']}}</center></td>
+                                        <td ng-style="{'width':'80px'}"><center>{{ao['Price']}}</center></td>
+                                        <td ng-style="{'width':'100px'}"><center>{{ao['Amount']}}</center></td>
+                                        <td ng-style="{'width':'80px'}"><center>{{ao['Total']}}</center></td>
+                                        <td ng-style="{'width':'70px'}"><center>{{ao['status']}}</center></td>
+                                        <td ng-style="{'width':'160px'}"><center>{{ao['datetime']}}</center></td>
+                                        <td ng-style="{'width':'20px'}"><center><input type="checkbox" name="selectedOrders" class="check_orders form-check-input" id="check_order_{{ao['order_id']}}"></center></td>
+                                    </tr>
+                                </tbody>     
+
+                            </table>
+                            <div class="col-md-12">
+                            <center>
+                            <i class="fa fa-spinner fa-spin" ng-style="waiting_modal==true?{'display':'inline-block','font-size':'150px', 'margin-top':'150px'}:{'display':'none'}"></i>
+                        </center>
+                    </div>
+
+                        </form>
+                        <!-- END FORMULARIO -->
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- END MODAL BODY -->
+
+            <!-- BEGIN MODAL FOOTER -->
+            <div class="modal-footer" ng-style="styleWeb">
+            </div>
+            <!-- END MODAL FOOTER -->
+
+        </div>
+    </div>
+</div>
+<!-- END MODAL COMPLETE ORDERS -->
+
+
+<!-- BEGIN MODAL LOG -->
+<div class="modal fade bs-log-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg mdialTamanio" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="xModalConfBots"><span aria-hidden="true">×</span></button>
+                <div class="row">
+                    <div class="col-md-5 col-sm-5 col-xs-5 form-group has-feedback">
+                        <h4 class="modal-title" ng-bind="modalTitle" id="myModalLabel"></h4>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3 form-group has-feedback">
+                        <i style="color:#1de9b6;" class="fa fa-android  fa-2x fa-fw"></i>
+                        <i style="color:#bdbdbd ;" class="fa fa-exchange fa-2x fa-fw"></i>
+                        <i style="color:#9fa8da;" class="fa fa-android  fa-2x fa-fw"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-4 col-lg-4 col-md-4 mail_list_column">
+                        <div class="row">
+                            <div class="col-sm-3 col-lg-3 col-md-3">
+                                <i style="color:#1de9b6;" class="fa fa-play  fa-2x fa-fw"></i>
+                            </div>
+                            <div class="col-sm-5 col-lg-5 col-md-5">
+                                <h4 style="margin-top:1px;">Lista Play</h4>
+                            </div>
+                            <div class="col-sm-3 col-lg-3 col-md-3">
+                                <i style="color:#9fa8da;" class="fa fa-stop  fa-2x fa-fw"></i>
+                            </div>
+                        </div>
+                        <div class="menuPlayLogs2 scroll-view main_menu_side">
+                            <div class="title_right">
+                                <div class="col-md-12 col-sm-12 col-xs-12 form-group pull-right top_search">
+                                      <div class="input-group">
+                                        <input type="text" class="form-control" ng-model="filterPlay" placeholder="Buscar Play...">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button">Buscar</button>
+                                        </span>
+                                      </div>
+                                </div>
+                            </div>
+                            <!--<a ng-click="clickPlayBot($index)" ng-repeat="p in listPlayBot| filter:filterPlay" >-->
+                            <a ng-click="clickPlayBot($index)" ng-repeat="p in listPlayBot" >
+                                <div class="mail_list">
+                                    <div class="left" style="width:90%; text-align: left">
+                                        <h3 ng-if='(p.dat_stop==null)'>Trade active</h3>
+                                        <h3 ng-if='(p.dat_stop!=null)'>Trade close
+                                        </h3>
+                                        <p> 
+                                            <span class="badge">Play date:</span>
+                                            {{p.dat_play}}
+                                        </p>
+                                        <p ng-if=(p.typ_trading=='buy')>
+                                            <span class="badge">Trading type:</span>
+                                            Buy
+                                        </p>
+                                        <p ng-if=(p.typ_trading=='sell')>
+                                            <span class="badge">Trading type:</span>
+                                            Sell
+                                        </p>
+                                        <p ng-if=(p.typ_trading=='both')>
+                                            <span class="badge">Trading type:</span>
+                                            Buy and Sell
+                                        </p>
+                                        <p> 
+                                           <span class="badge">Stop date:</span>
+                                            {{p.dat_stop}}
+                                        </p>
+                                        <p> 
+                                            <span class="badge">Duración:</span> 
+                                            {{p.diferencia}}
+                                        </p>
+                                    </div>
+                                    <div class="right" style="width:5%;">
+                                        <i class="fa" ng-class="(p.dat_stop==null)? 'fa-spinner fa-spin':'fa-lock'"></i> 
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 col-lg-8 col-md-8">
+                        <div ng-show="verLog">
+                          <section class="content invoice">
+                            <div class="row">
+                              <div class="col-xs-12 invoice-header">
+                                <h1>
+                                  <i class="fa fa-info"></i> Trading information.
+                                  <small class="pull-right">Play: {{playData.dat_play}}</small>
+                                  <small class="pull-right" ng-bind="(playData.dat_stop==null)? '' : 'Stop: '+ playData.dat_stop"></small>
+                                </h1>
+                              </div>
+                            </div>
+                            <div class="row invoice-info">
+                              <div class="col-sm-4 invoice-col">
+                                Activate by:
+                                <address>
+                                  <strong>{{playData.user_play}}</strong>
+                                </address>
+                              </div>
+                              <div class="col-sm-4 invoice-col">
+                                Deactivate by:
+                                <address>
+                                  <strong>{{playData.user_stop}}</strong>
+                                </address>
+                              </div>
+                              <div class="col-sm-4 invoice-col">
+                                <b>Play ID: {{playData.id_bots_play}}</b>
+                                <br>Trading type: {{playData.typ_trading}}
+                                <b>Play ID:</b> {{playData.id_play}}
+                                <br>
+                                <b>Fails:</b> <b class="">17 <span class=''>&#160;</span> </b>
+                                <br>
+                                <b>Success:</b> <b class="">27 <span class=''>&#160;</span> </b>
+                              </div>
+                            </div>
+                          <div class="row">
+                            <div class="col-xs-12 table">
+                            <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                            <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                              <li role="presentation" class="active">
+                                  <a href="#tab_content1" id="home-tab" role="tab"data-toggle="tab" aria-expanded="true">
+                                      All
+                                  </a>
+                              </li>
+                              <li role="presentation" class="">
+                                  <a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Buy</a>
+                              </li>
+                              <li role="presentation" class="">
+                                  <a href="#tab_content3" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Sell</a>
+                              </li>
+                            </ul>
+                            <div id="myTabContent" class="tab-content menuPlayLogs" >
+                              <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+                                <ul class="list-unstyled timeline">
+                                  <li ng-repeat="l in listLogPlay ">
+                                    <div class="block">
+                                      <div class="tags">
+                                        <a href="" class="tag " ng-class="(l.type=='buy')?'tagMorado':''" >
+                                          <span ng-bind="(l.type=='buy')? 'Buy': 'Sell' "></span>
+                                        </a>
+                                        </div>
+                                        <div class="block_content">
+                                          <h2 class="title">
+                                            <a ng-bind=(l.response.idOrder)></a>
+                                          </h2>
+                                          <div class="byline">
+                                            <span>fecha:</span> <a ng-bind="l.date"></a>
+                                          </div>
+                                          <br>
+                                          <div class="row">
+                                            <div class="col-lg-2">
+                                              <p>
+                                                  Data received
+                                              </p>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                {{l.response}}
+                                            </div>
+                                          </div>
+                                          <div class="row">
+                                            <div class="col-lg-4">
+                                              <p class="excerpt" ng-bind="'Currency:'+l.response.secondCurrency"></p>
+                                            </div>
+                                            <div class="col-lg-4">
+                                              <p class="excerpt" ng-bind="'Price:'+l.response.price"></p>
+                                            </div>
+                                            <div class="col-lg-4">
+                                              <p class="excerpt" ng-bind="'Amount:'+l.response.amount+l.response.firstCurrency"></p>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                  </ul>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+                                  <ul class="list-unstyled timeline">
+                                    <li ng-repeat="l in listLogPlay | filter:{type:'buy'}">
+                                      <div class="block">
+                                        <div class="tags">
+                                          <a href="" class="tag " ng-class="(l.type=='buy')?'tagMorado':''" >
+                                            <span ng-bind="(l.type=='buy')? 'Buy': 'Sell' "></span>
+                                          </a>
+                                        </div>
+                                        <div class="block_content">
+                                          <h2 class="title">
+                                            <a ng-bind=(l.response.idOrder)></a>
+                                          </h2>
+                                          <div class="byline">
+                                            <span>fecha:</span> <a ng-bind="l.date"></a>
+                                          </div>
+                                          <br>
+                                          <div class="row">
+                                            <div class="col-lg-3">
+                                                Data received
+                                            </div>
+                                            <div class="col-lg-5">
+                                                {{l.response}}
+                                            </div>
+                                          </div>
+                                          <div class="row">
+                                            <div class="col-lg-4">
+                                              <p class="excerpt" ng-bind="'Currency:'+l.response.secondCurrency"></p>
+                                            </div>
+                                            <div class="col-lg-4">
+                                              <p class="excerpt" ng-bind="'Price:'+l.response.price"></p>
+                                            </div>
+                                            <div class="col-lg-4">
+                                              <p class="excerpt" ng-bind="'Amount:'+l.response.amount+l.response.firstCurrency"></p>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                  </ul>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+                                  <ul class="list-unstyled timeline">
+                                    <li ng-repeat="l in listLogPlay | filter:{type:'sell'}">
+                                      <div class="block">
+                                        <div class="tags">
+                                          <a href="" class="tag " ng-class="(l.type=='buy')?'tagMorado':''" >
+                                            <span ng-bind="(l.type=='buy')? 'Buy': 'Sell' "></span>
+                                          </a>
+                                        </div>
+                                        <div class="block_content">
+                                          <h2 class="title">
+                                            <a ng-bind=(l.response.idOrder)></a>
+                                          </h2>
+                                          <div class="byline">
+                                          <span>fecha:</span> <a ng-bind="l.date"></a>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                          <div class="col-lg-3">
+                                              Data recieved
+                                          </div>
+                                          <div class="col-lg-5">
+                                              {{l.response}}
+                                          </div>
+                                        </div>
+                                        <div class="row">
+                                          <div class="col-lg-4">
+                                              <p class="excerpt" ng-bind="'Currency:'+l.response.secondCurrency"></p>
+                                            </div>
+                                            <div class="col-lg-4">
+                                              <p class="excerpt" ng-bind="'Price:'+l.response.price"></p>
+                                            </div>
+                                            <div class="col-lg-4">
+                                              <p class="excerpt" ng-bind="'Amount:'+l.response.amount+l.response.firstCurrency"></p>
+                                            </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                            </div>
+                                </div>
+                                </div>
+                                </section>        
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<!-- END MODAL LOG -->

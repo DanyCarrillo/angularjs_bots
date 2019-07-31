@@ -1,0 +1,178 @@
+<br>btn-round
+<div class="">
+    <div class="page-title">
+        <div class="title_left">
+            <center><h3>Users list</h3></center>
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12  pull-right top_search">
+                <!--<div class="input-group">-->
+                    <input type="text" class="form-control" ng-model="filterUser" placeholder="Search">
+                    <span class="input-group-btn">
+                      <!-- <button class="btn btn-default" type="button">Buscar</button> -->
+                    </span>
+                <!--</div>-->
+            </div>
+        </div> 
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <div class="row">
+                        <div class="col-md-10 col-sm-10 col-xs-10">
+                            <h2>Users
+                                <small>Allowed to enter the platform</small>
+                            </h2>
+                        </div>
+                        <div class="col-md-2 col-sm-2 col-xs-2">
+                            <a id="btnAdduser" class=" btn btn-round btn-success btn-xs" data-toggle="modal" data-target=".bs-example-modal-md" ng-click="con_modal('A')" style="padding:20px; border-radius: 20px;   font-size: 13px;">
+                                <i id="btnicon" class="fa fa-user pull-left" style="padding: 3px;"></i>
+                                <strong> Add user</strong>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>User</th>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="u in users2 | filter:filterUser">
+                            <th ng-bind="u.id" scope="row"></th>
+                            <td ng-bind="u.username"></td>
+                            <td ng-bind="u.name"></td>
+                            <td>
+                                <span ng-bind="(u.status=='active')?'Active':'Inactive'" ng-class="(u.status=='inactive')?'label label-info':'label label-warning'"></span>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-success btn-xs">Actions</button>
+                                  
+                                    <button type="button" class="btn btn-success dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+
+                                    <ul ng-if="(u.status=='active')"
+                                        class="dropdown-menu" role="menu">
+                                        <li>
+                                            <a href="#" data-toggle="modal" data-target=".bs-example-modal-md" ng-click="con_modal('M',u,$index)">Edit</a>
+                                        </li>
+                                        <li>
+                                            <a ng-click="confirSuspender(u,$index)">Suspend</a>
+                                        </li>
+                                        <!--                    
+                                            <li class="divider"></li>
+                                            <li>
+                                                <a ng-click="confirEliminar(u,$index)">Delete</a>
+                                            </li> 
+                                        -->
+                                    </ul>
+                        
+                                    <ul ng-if="(u.status=='inactive')"
+                                        class="dropdown-menu" role="menu">
+                                        <li>
+                                            <a href="#" data-toggle="modal" data-target=".bs-example-modal-md" ng-click="con_modal('M',u,$index)">Edit</a>
+                                        </li>
+                                        <li>
+                                            <a ng-click="confirActivar(u,$index)">Active</a>
+                                        </li>
+                                        <!--
+                                            <li class="divider"></li>
+                                            <li>
+                                                <a ng-click="confirEliminar(u,$index)">Delete</a>
+                                            </li>
+                                        -->
+                                    </ul> 
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #2A3F54;">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true" ng-style="{'color':'white'}" style="color: white;">×</span>
+                </button>
+                <h4 class="modal-title" ng-bind="modalTitle" id="myModalLabel" style="color: white;"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="x_panel">
+                    <div class="x_content">
+                        <form class="form-horizontal form-label-left input_mask">
+                            <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                <input type="text" name="firstname" ng-model="usuario.firstname" class="form-control  has-feedback-left" placeholder="Firstname">
+                                <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                            </div>
+
+                            <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                <input type="text" name="lastname" class="form-control" ng-model="usuario.lastname" placeholder="Lastname">
+                                <span class="fa fa-user  form-control-feedback right" aria-hidden="true"></span>
+                            </div>
+
+                            <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                <input type="email" name="email" ng-model="usuario.email" class="form-control  has-feedback-left" placeholder="example@bitinka.com">
+                                <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                            </div>
+
+                            <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                <input type="text" name="username" class="form-control" ng-model="usuario.username" placeholder="Username" ng-disabled="isDisable">
+                                <span class="fa fa-user  form-control-feedback right" aria-hidden="true"></span>
+                            </div>
+
+                            <div ng-show='modUser'>
+                                <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                                    <div class="">
+                                        <center>
+                                            <label>
+                                                <input type="checkbox" id="swich1" ng-model="switchCamPass" class="js-switch"/> Change password
+                                            </label>
+                                        </center>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="password" ng-show='switchCamPass || !(modUser) '>
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    <input type="password" name="pass" ng-model="usuario.password" class="form-control has-feedback-left"ng-keypress="keyPassword($event)" placeholder="Password">
+                                    <span class="fa fa-key form-control-feedback left" aria-hidden="true"></span>
+                                </div>
+
+                                <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                    <input type="password" name="confir_pass" class="form-control" ng-model="usuario.pass_confirm" placeholder="Password confirmation">
+                                    <span class="fa fa-key form-control-feedback right" aria-hidden="true"></span>
+                                </div>
+                            </div>
+
+                            <div class="ln_solid"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="background-color: #2A3F54;">
+                <button ng-click="(modUser)?modUserGeneral():addUser()" type="button" class="btn btn-primary" data-dismiss="modal">Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

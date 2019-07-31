@@ -1,0 +1,184 @@
+<br><br>
+<div class="">
+    
+    <div class="page-title">
+        <div class="title_left">
+            <h3 class='azulTitle'>Orders administrator</h3>
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                <div class="input">
+                    <!--<input type="text" class="form-control ng-valid ng-not-empty ng-dirty ng-valid-parse ng-touched" ng-model="filterApiUser" placeholder="Buscar Exchange">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">Search</button> 
+                    </span>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="clearfix"></div>
+    
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+
+                <div class="x_title">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <h2>Orders
+                                <small>Allowed to bot configurations</small>
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="x_content">
+                    
+                    <!-- BEGIN FILTROS -->
+                    <div class="row" ng-style="{'border-bottom':'2px solid #e2e2e2', 'padding-bottom':'16px'}">
+
+                        <!-- Begin Columna Filtros -->
+                        <div class="col-md-3 col-sm-3 col-xs-3">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                    <label>Username:</label>
+                                </div>
+                                <div class="col-md-8 col-sm-8 col-xs-8">
+                                    <center><select class="form-control" tabindex="10" ng-model="ngUsernameExchange" ng-style="{'width':'90%', 'height':'25px', 'border-radius': '10px', 'padding': '0px 8px'}" ng-options="user.idUser as user.username for user in usersExchange track by user.username" ng-change="showOrdersByUserYPair(ngUsernameExchange,ngPairExchange,'D')">
+                                        <option value="" ng-disabled="true">-- Select --</option>
+                                    </select></center>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                    <label>Pair:</label>
+                                </div>
+                                <div class="col-md-8 col-sm-8 col-xs-8">
+                                    <center><select class="form-control" tabindex="10" ng-model="ngPairExchange" ng-style="{'width':'90%', 'height':'25px', 'border-radius': '10px', 'padding': '0px 8px'}" ng-options="pair.idPair as pair.pair for pair in pairs track by pair.pair" ng-change="showOrdersByUserYPair(ngUsernameExchange,ngPairExchange,'D')">
+                                        <option value="" ng-disabled="true">-- Select --</option>
+                                    </select></center>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Columna Filtros -->
+
+                        <!-- Begin Columna Tiempos -->
+                        <div class="col-md-3 col-sm-3 col-xs-3" ng-style="{'padding-top':'5px'}">
+                            <div class="row">
+                                <center>
+                                    <label>Tiempo:</label>
+                                    <button class="btn btn-primary btn-xs" ng-click="filtroTiempos(time_orders)"><i class="glyphicon glyphicon-play"></i></button>
+                                </center>
+                                <center><input type="number" class="form-control" ng-model="time_orders" ng-style="{'border-radius': '10px', 'padding':'0px 6px', 'width':'40%' , 'height':'25px'}"></center>
+                            </div>
+                        </div>
+                        <!-- End Columna Tiempos -->
+
+                        <!-- Begin Columna Check all -->
+                        <div class="col-md-3 col-sm-3 col-xs-3">
+                            <center>
+                                <label>Select All</label>
+                                <input type="checkbox" class="form-control" ng-style="{'width':'15%'}" ng-model="check_all" ng-change="check_decheck_all($event)">
+                            </center>
+                        </div>
+                        <!-- End Columna Check all -->
+
+                        <!-- Begin Columna Boton Cancel -->
+                        <div class="col-md-3 col-sm-3 col-xs-3" align="right" ng-style="{'padding-top':'16px'}">
+                            <button type="button" class="btn btn-sm" ng-style="{'background-color':'#B94848','color':'white'}" ng-click="cancelOrders()">
+                                <i class="glyphicon glyphicon-stop"></i>
+                                Cancel Orders
+                            </button>
+                        </div>
+                        <!-- End Columna Boton Cancel -->
+
+                    </div>
+                    <!-- END FILTROS -->
+
+                    <!-- BEGIN TABLA BOTS CONFIGURATIONS --> 
+                    <div class="x_content">
+
+                        <table class="table table-hover table-sm table-primary" ng-style="{'width':'100%'}">
+
+                            <!-- BEGIN Table Header -->
+                            <thead>
+                                <tr>
+                                    <th ng-repeat="cab in cabeceras" ng-bind="cab" ng-style="{'text-align':'center'}"></th>
+                                </tr>
+                            </thead>
+                            <!-- END Table Header -->
+
+                            <!-- BEGIN Table Body -->
+                            <tbody ng-if="!waiting_orders">
+                                <tr ng-repeat="order in orders track by $index" repeat-done="{{$index}}">
+                                    <center><th ng-bind="{{$index+1}}" scope="row"></th></center>
+                                    <td> 
+                                        <center> 
+                                            <h5 ng-bind="order.order_id"></h5> 
+                                        </center>
+                                    </td>
+                                    <td> 
+                                        <center> 
+                                            <h5 ng-bind="order.Type"></h5> 
+                                        </center>
+                                    </td>
+                                    <td> 
+                                        <center> 
+                                            <h5 ng-bind="order.Price"></h5> 
+                                        </center>
+                                    </td>
+                                    <td> 
+                                        <center> 
+                                            <h5 ng-bind="order.Amount"></h5> 
+                                        </center>
+                                    </td>
+                                    <td> 
+                                        <center> 
+                                            <h5 ng-bind="order.Total"></h5> 
+                                        </center>
+                                    </td>
+                                    <td> 
+                                        <center> 
+                                            <h5 ng-bind="order.status"></h5> 
+                                        </center>
+                                    </td>
+                                    <td> 
+                                        <center> 
+                                            <h5 ng-bind="order.datetime"></h5> 
+                                        </center>
+                                    </td>
+                                    <td> 
+                                        <center> 
+                                            <input type="checkbox" class="check_orders form-control" id="check_order_{{order['order_id']}}">
+                                        </center>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <!-- END Table Body -->
+
+                        </table>
+
+                        <div class="col-md-12">
+                            <center>
+                                <i class="fa fa-spinner fa-spin" ng-style="waiting_orders==true?{'display':'inline-block','font-size':'150px'}:{'display':'none'}"></i>
+                            </center>
+                        </div>
+
+                        <div class="col-md-12">
+                            <center>
+                                <h5 ng-style="(data_orders==false && waiting_orders==false)? {'display':'inline-block', 'font-size':'20px'} : {'display':'none'}">No data founded for that pair with user exchange.</h5>
+                            </center>
+                        </div>
+
+                    </div>
+                    <!-- END TABLA BOTS CONFIGURATIONS -->
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

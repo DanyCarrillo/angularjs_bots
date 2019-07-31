@@ -1,0 +1,41 @@
+<div class='login' id="campos" onsubmit="return validation()" ng-keypress="$event.keyCode === 13 && loguear()">
+    <div class='login_title'>
+      <span>Bots 2.0</span>
+    </div>
+    <div class='login_fields'>
+      <div class='login_fields__user'>
+        <div class='icon'>
+          <img src="/static/images/user_icon_copy.png">
+        </div>
+        <input placeholder='Username' name="user" ng-model="formLogin.username" type='text' required>
+          <div class='validation'> 
+            <img src="/static/images/usertick.png">
+          </div>
+        </input>
+    </div>
+    <div class='login_fields__password'>
+      <div class='icon'>
+        <img src="/static/images/lock_icon_copy.png">
+      </div>
+      <input placeholder='Password' name="password" ng-model="formLogin.password"  type='password' required>
+      <div class='validation'>
+        <img src="/static/images/usertick.png">
+      </div>
+    </div>
+    <div class='login_fields__submit'>
+      <center>
+        <input ng-click='loguear()' type='submit' value='Log In'>
+  
+      </center>
+            
+    </div>
+  </div>
+  <div class='success'>
+    <h2 >{{mensajeAtenticate}}</h2>
+    <p>{{mensajeAtenticate}}</p>
+  </div>
+</div>
+<div  class='authent'>
+  <img src="/static/images/puff.svg">
+  <p>Autenticando...</p>
+</div>

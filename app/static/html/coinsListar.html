@@ -1,0 +1,517 @@
+<br><br><br>
+<div class="container">
+  <div class="row" >
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="page-title">
+        <a ng-click="abrirPantalla('A')" id="btnAddCoin" class="btn btn-app  pull-right" style='padding:20px; border-radius: 20px;  border: 2px solid #ddd; background-color: white; font-size: 13px;'>
+          <i class="fa fa-btc btc pull-right"></i>
+          <i class="fa fa-money dolar pull-left"></i>  
+          <strong> Add coin </strong>
+        </a>
+        <center><h3 class='azulTitle'>Bots currencies administrator!</h3></center>
+      </div>
+    </div>
+  </div>
+
+  <div class="clearfix"></div>
+
+  <div class="row">
+    <div class="col-md-4 col-sm-4 col-xs-4">
+      <div class=''>
+        <div class="x_title">
+          <div clas="row">
+            <div class="col-md-4 col-sm-4 col-xs-4">
+              <i title="Crypto-currencies" class="fa fa-btc fa-2x btc" > </i>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6">
+              <h2>Currencies</h2>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-2">
+              <i title="Fiat-currencies" class="fa fa-money fa-2x dolar"  > </i>
+            </div>
+          </div>
+          <div class="input-group form-group pull-right top_search">
+            <input type="text" class="form-control" ng-model="filterCoins" placeholder="Coin search...">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button">Search</button>
+            </span>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="menuMonedas scroll-view main_menu_side">
+          <div class="text-center display-2" ng-hide="(coins.length > 0)">
+            <h1>
+              <i class="fa fa-spinner fa-spin"></i>
+            </h1>
+          </div>
+          <ul class="list-unstyled top_profiles scroll-view"  >
+            <li id="{{coin.name}}" ng-click="abrirPantalla('M',coin,$index)" class="media event cursor" ng-repeat="coin in coins | filter:filterCoins | orderBy:'type'">
+              <a class="pull-left ">
+                <i ng-class="(coin.type=='F')?'fa fa-money  fa-2x fa-fw dolar':'fa fa-btc btc fa-2x fa-fw'"></i>
+              </a>
+              <!--<a class="pull-right ico-eliminar"  ng-click="ConfirEliminar($index)" >-->
+                <!--<i title="Deleted" class="fa fa-times  fa-fw  "></i>-->
+                <!--</a>-->
+                <div class="media-body">
+                  <h5><a class="title" ng-bind="coin.name" ></a> <small ng-show="(coin.api_links)" > | <strong>APIs' Number: </strong>{{coin.api_links.length}} </small></h5>
+                  <p><strong ng-bind="'1 '+coin.name+' = '+coin.con_buy+' USD'" > </strong> Buy convertion  </p>
+                  <p> <strong ng-bind="'1 '+coin.name+' = '+coin.con_sell+' USD'" > </strong> Sell convertion  </p>
+                  <span class="pull-right " ng-bind="(coin.status=='A')?'Active':'Suspended'" ng-class="(coin.status=='A')?'label label-info':'label label-warning'"></span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div ng-show='gestionarMoneda' class="col-md-8 col-sm-8 col-xs-8">
+        <center>
+          <h2 ng-bind="titleOperacion"></h2>
+        </center>
+        <div class="row" id="name_typeCoin">
+          <div id="currencyName" align="left" class="col-md-4 col-sm-4 col-xs-4 col-md-offset-1 col-sm-offset-1 col-xs-offset-1 form-group  ">
+            <label for="priceBuy">Currency name * :</label>
+            <input type="text" ng-model="co.name" class="form-control has-feedback-left" placeholder="Ex: BTC PEN USD" ng-disabled="disable_coName">
+            <span class="fa fa-money dolar form-control-feedback left" aria-hidden="true"></span>
+          </div>
+          <div id="typeCoin" align="left" class="col-md-4 col-sm-4 col-xs-4 form-group has-feedback">
+            <div class="form-group">
+              <label for="priceBuy">Type coin * :</label>
+              <select ng-disabled="(modificando)?true:false" ng-model='co.type' class="form-control">
+                <option value="" ng-disabled="true">Select coin</option>
+                <option value="C">Crypto-currencies</option>
+                <option value="F">Fiat</option>
+              </select>
+            </div>
+          </div>
+          <div id="symbolCoin" class="col-md-2 col-sm-2 col-xs-2 form-group has-feedback">
+            <a class="pull-left ">
+              <i class="fa fa-2x fa-fw" ng-class="{'fa-money dolar': co.type=='F','fa-btc btc ':co.type=='C'}"></i>              
+            </a>
+          </div>
+        </div>
+        <div class="row" >
+          <div ng-show='modificando' class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+           <div class="" >
+            <div class="col-lg-offset-1 col-lg-4 col-md-4 col-sm-4 col-xs-4">  
+              <label>
+                <input type="checkbox" id="swich1" ng-model="switchStatus" class="js-switch"/> 
+              </label>
+              <span ng-bind="(switchStatus==false)?'Inactive':'Active'" ng-class="(switchStatus==false)?'label label-warning':'label label-info'"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div ng-show="(modificando==false && co.type=='F')" class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div id="container_priceCoin" class="col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+            <div align="left">
+             <div class="col-md-5 col-sm-5 col-xs-5  form-group has-feedback ">
+              <label for="priceBuy">Buy price * :</label>
+              <input type="number" id="priceBuy" ng-model="co.con_buy" class="form-control" name="priceBuy" required />
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-4  form-group has-feedback ">
+              <label for="priceSell">Sell price * :</label>
+              <input type="number" id="priceSell" ng-model="co.con_sell" class="form-control" name="priceSell" required />
+            </div>
+          </div>
+        </div>
+
+        <div id="cotainer_structure_Method_paramsCoin" class="col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+          <div class="col-md-5 col-sm-5 col-xs-5  form-group has-feedback ">
+            <label for="param">Structure :</label>
+            <div class="form-group">
+              <select ng-disabled="(modificando)?true:false" ng-model='co.data_type' class="form-control">
+                <option value="" ng-disabled="true">Structure type</option>
+                <option value="JSON">JSON</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-4 col-sm-4 col-xs-4 form-group has-feedback">
+            <label for="meth">Method :</label>
+            <div class="form-group">
+              <select ng-disabled="(modificando)?true:false" ng-model='co.meth' class="form-control" ng-init='co.type=""'>
+                <option value="" ng-disabled="true">Type method</option>
+                <option value="POST">POST</option>
+                <option value="GET">GET</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-5 col-sm-5 col-xs-5  form-group has-feedback ">
+            <label for="meth">Params :</label>
+            <textarea class="form-control" rows="3" placeholder='Params' id="descriptionNewPackage" ng-model="co.param"></textarea>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+            <h4>Api to determine price in dollars</h4>
+          </div>
+        </div>
+
+        <div class="row">   
+          <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1 form-group has-feedback ">
+            <input type="text" ng-model="co.links.one.linkCrip" ng-change="veriLink(1)" class="form-control has-feedback-left" placeholder="Api link to get prices">
+            <span style="color:#00897b" class="fa fa-link form-control-feedback left" aria-hidden="true"></span>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+            <a class="pull-left ">
+              <i class="fa fa-2x fa-fw" ng-class="{'fa-spinner fa-spin azul': co.links.one.status=='B','fa-check verde':co.links.one.status=='OK','fa-times rojo':co.links.one.status=='E',
+              'fa-hand-o-left azul' :co.links.one.status==null}"></i>
+              <button ng-show="(co.links.one.status == 'OK')" ng-click="getApiValue(1)" type="button" class="btn btn-info btn-sm">Show response</button>
+            </a>
+            <p> {{co.links.one.coordinates}} </p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback ">
+            <center>
+              <button ng-click="(modCoin)? modificarMoneda(): enviarMoneda()" type="button" class="btn btn-info btn-sm">Save</button>
+            </center>
+          </div>
+      </div>
+      <div ng-hide="(responseApiShow == false)" ng-show="(responseApiShow == true)" class="row">
+        <div class="table-responsive">
+          <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <td><a ng-click="backObjectApi()" ng-disabled="apiCoord.length < 1" class="buttonPrevious btn btn-primary">Start</a></td>
+                  <td>Values coordinates:</td>
+                </tr>
+              </thead>
+              <tbody ng-repeat="(key,value) in responseApiBtc">
+                <tr>
+                  <th scope="row">{{key}}</th>
+                  <td ng-click = nextKey(key) ng-mouseover="checkKeyType(key)" ng-class="{'cursorPointer':valueApi==true, 'cursorZoom':valueApi == false}">{{value}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div ng-show="(modificando==true && co.type== 'F')" class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+          <h4><center>Edit prices</center></h4>
+        </div>
+        <div class="col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+          <div class="col-md-5 col-sm-5 col-xs-5  form-group has-feedback ">
+            <label for="priceBuy">Buy price * :</label>
+            <input type="number" id="priceBuy" ng-model="co.con_buy" class="form-control" name="priceBuy" required />
+          </div>
+          <div class="col-md-5 col-sm-5 col-xs-5  form-group has-feedback ">
+            <label for="priceSell">Sell price * :</label>
+            <input type="number" id="priceSell" ng-model="co.con_sell" class="form-control" name="priceSell" required />
+          </div>
+        </div>
+
+        <div class="row">
+          <center>
+            <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback ">
+              <button id="btnsave" ng-click="(modCoin)? modificarMoneda(): enviarMoneda()" type="button" class="btn btn-info btn-sm">Save</button>
+            </div>
+          </center>
+        </div>
+      </div>
+
+      <div class="apis-afilliation col-lg-6 col-md-6 col-sm-6 col-xs-6 col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">
+        <div class="row">
+          <center class="azulTitle apis-title">Affiliated API's
+            <button ng-click="addApiLink()" type="button" data-toggle="modal" data-target=".modifCripto" class="btn btn-success btn-sm">Add link</button>
+          </center>
+        </div>
+        <table class="table table-bordered" style="text-align:center;">
+          <thead>
+            <tr>
+              <th class="table-head">Id</th>
+              <th class="table-head">Coin</th>
+              <th class="table-head" colspan="2">Operations </th>
+            </tr>
+          </thead>
+          <tbody ng-repeat="api_link in api_links">
+            <tr >
+              <td scope="row">{{api_link.id}}</td>
+              <td><span>{{api_link.coin_ref}}</span></td>
+              <td>
+                <button ng-click="updateApiLink(api_link, $index)" aria-hidden="true" data-toggle="modal" data-target=".modifCripto" type="button" class="btn btn-info btn-sm">Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>    
+
+    <div ng-show="(modificando==false && co.type=='C')" class="row">
+      <div class="col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+
+        <div class="col-md-5 col-sm-5 col-xs-5  form-group has-feedback ">
+          <label for="priceBuy">Buy price * :</label>
+          <input type="number" id="priceBuy" ng-model="co.con_buy" class="form-control" name="priceBuy" required />
+        </div>
+
+        <div class="col-md-4 col-sm-4 col-xs-4  form-group has-feedback ">
+          <label for="priceSell">Sell price * :</label>
+          <input type="number" id="priceSell" ng-model="co.con_sell" class="form-control" name="priceSell" required />
+        </div>
+
+        <div class="col-md-5 col-sm-5 col-xs-5  form-group has-feedback ">
+          <label for="param">Structure * :</label>
+          <div class="form-group">
+            <select ng-disabled="(modificando)?true:false" ng-model='co.data_type' class="form-control">
+              <option value="" ng-disabled="true">Structure type</option>
+              <option value="JSON">JSON</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-sm-4 col-xs-4 form-group has-feedback">
+          <label for="meth">Method * :</label>
+          <div class="form-group">
+            <select ng-disabled="(modificando)?true:false" ng-model='co.meth' class="form-control" ng-init='co.type=""'>
+              <option value="" ng-disabled="true">Type method</option>
+              <option value="POST">POST</option>
+              <option value="GET">GET</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-5 col-sm-5 col-xs-5  form-group has-feedback ">
+          <label for="meth">Params :</label>
+          <textarea class="form-control" rows="3" placeholder='Params' id="descriptionNewPackage" ng-model="co.param"></textarea>
+        </div>
+
+          <!-- <div class="col-md-4 col-sm-4 col-xs-4  form-group has-feedback ">
+            <label for="meth">Reference coin * :</label>
+            <input type="text" ng-model="co.coin_ref" class="form-control has-feedback-left" placeholder="Ex: USD">
+          </div> -->
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+              <h4>Api to determine price in dollars * </h4>
+            </div>
+          </div>
+          <div class="row">   
+            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1 form-group has-feedback ">
+              <input type="text" ng-model="co.links.one.linkCrip" ng-change="veriLink(1)" class="form-control has-feedback-left" placeholder="Api link to get prices">
+              <span style="color:#00897b" class="fa fa-link form-control-feedback left" aria-hidden="true"></span>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <a class="pull-left ">
+                <i class="fa fa-2x fa-fw" ng-class="{'fa-spinner fa-spin azul': co.links.one.status=='B','fa-check verde':co.links.one.status=='OK','fa-times rojo':co.links.one.status=='E',
+                'fa-hand-o-left azul' :co.links.one.status==null}"></i>
+                <button ng-show="(co.links.one.status == 'OK')" ng-click="getApiValue(1)" type="button" class="btn btn-info btn-sm">Show response</button>
+              </a>
+              <p> {{co.links.one.coordinates}} </p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback ">
+            <center>
+              <button ng-click="(modCoin)? modificarMoneda(): enviarMoneda()" type="button" class="btn btn-info btn-sm">Save</button>
+            </center>
+          </div>
+        </div>
+        <div ng-hide="(responseApiShow == false)" ng-show="(responseApiShow == true)" class="row">
+          <div class="table-responsive">
+            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <td><a ng-click="backObjectApi()" ng-disabled="apiCoord.length < 1" class="buttonPrevious btn btn-primary">Start</a></td>
+                    <td>Values coordinates:</td>
+                  </tr>
+                </thead>
+                <tbody ng-repeat="(key,value) in responseApiBtc">
+                  <tr>
+                    <th scope="row">{{key}}</th>
+                    <td ng-click = nextKey(key) ng-mouseover="checkKeyType(key)" ng-class="{'cursorPointer':valueApi==true, 'cursorZoom':valueApi == false}">{{value}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div ng-show="(modificando==true && co.type== 'C')" class="row">
+        <!--   <div class="apis-afilliation col-lg-6 col-md-6 col-sm-6 col-xs-6 col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-offset-2"> -->
+
+          <!-- <div class="row"> -->
+            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+              <h4><center>Edit prices</center></h4>
+            </div>
+            <div class="col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+              <div class="col-md-5 col-sm-5 col-xs-5  form-group has-feedback ">
+                <label for="priceBuy">Buy price * :</label>
+                <input type="number" id="priceBuy" ng-model="co.con_buy" class="form-control" name="priceBuy" required />
+              </div>
+              <div class="col-md-5 col-sm-5 col-xs-5  form-group has-feedback ">
+                <label for="priceSell">Sell price * :</label>
+                <input type="number" id="priceSell" ng-model="co.con_sell" class="form-control" name="priceSell" required />
+              </div>
+            </div>
+            <center>
+              <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback ">
+                <button id="btnsave" ng-click="(modCoin)? modificarMoneda(): enviarMoneda()" type="button" class="btn btn-info btn-sm">Save</button>
+              </div>
+            </center>
+            <!-- </div> -->
+            <!-- </div> -->
+            <div class="apis-afilliation col-lg-6 col-md-6 col-sm-6 col-xs-6 col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">
+              <div class="row">
+                <center class="azulTitle apis-title">Affiliated API's
+                 <button ng-click="addApiLink()" type="button" data-toggle="modal" data-target=".modifCripto" class="btn btn-success btn-sm">Add link</button></center>
+               </div>
+               <table class="table table-bordered" style="text-align:center;">
+                <thead>
+                  <tr>
+                    <th class="table-head">Id</th>
+                    <th class="table-head">Coin</th>
+                    <th class="table-head" colspan="2">Operations</th>
+                  </tr>
+                </thead>
+                <tbody ng-repeat="api_link in api_links">
+                  <tr >
+                    <td scope="row">{{api_link.id}}</td>
+                    <td><span>{{api_link.coin_ref}}</span></td>
+                    <td>
+                      <button ng-click="updateApiLink(api_link, $index)" aria-hidden="true" data-toggle="modal" data-target=".modifCripto" type="button" class="btn btn-info btn-sm">Edit <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal fade bs-example-modal-lg modifCripto" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close" >
+              <span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Api link</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 col-xs-offset-1">
+                <h4>Api to determine price in dollars</h4>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-5 col-sm-5 col-xs-5 col-xs-offset-1  form-group has-feedback ">
+                <label for="param">Structure :</label>
+                <div class="form-group">
+                  <select ng-model='co.data_type' class="form-control">
+                    <option value="" ng-disabled="true">Structure type</option>
+                    <option value="JSON">JSON</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-5 col-sm-5 col-xs-5 form-group has-feedback">
+                <label for="meth">Method :</label>
+                <div class="form-group">
+                  <select ng-model='co.meth' class="form-control" ng-init='co.type=""'>
+                    <option value="" ng-disabled="true">Type method</option>
+                    <option value="POST">POST</option>
+                    <option value="GET">GET</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-5 col-sm-5 col-xs-5 col-xs-offset-1  form-group has-feedback ">
+                <label for="meth">Params :</label>
+                <textarea class="form-control" rows="3" placeholder='Params' id="descriptionNewPackage" ng-model="co.param"></textarea>
+              </div>
+
+              <div class="col-md-5 col-sm-5 col-xs-5  form-group has-feedback " ng-hide="coin_refHide">
+                <label for="meth">Reference coin :</label>
+                <select ng-model='co.coin_ref' class="form-control">
+                  <option value="" ng-disabled="true">Reference coin</option>
+                  <option value="USD">USD</option>
+                  <option value="BTC">BTC</option>
+                </select>
+                <!--  <input type="text" ng-model="co.coin_ref" class="form-control has-feedback-left" placeholder="Ex: PEN USD"> -->
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1 form-group has-feedback ">
+                <input type="text" ng-model="co.links.one.linkCrip" ng-change="veriLink(1)" class="form-control has-feedback-left" placeholder="Api link to get prices">
+                <span style="color:#00897b" class="fa fa-link form-control-feedback left" aria-hidden="true"></span>
+              </div>
+              <div class="col-xs-1" >
+                <i class="fa fa-2x fa-fw" ng-class="{'fa-spinner fa-spin azul': co.links.one.status=='B','fa-check verde':co.links.one.status=='OK','fa-times rojo':co.links.one.status=='E',
+                'fa-hand-o-left azul' :co.links.one.status==null}"></i>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3  form-group has-feedback ">
+                <a class="pull-left ">
+                  <button ng-show="(co.links.one.status == 'OK')" ng-click="getApiValue(1)" type="button" class="btn btn-info btn-sm">Show response</button>
+                </a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-11 col-xs-offset-1 text-center">
+                {{co.links.one.coordinates}}
+              </div>
+              <div class="col-xs-11 col-xs-offset-1" ng-repeat="(key,value) in co.links.one.coordinates">
+                 <div class="col-xs-1 text-right text-uppercase"><strong>{{key}}</strong>:</div>
+                 <div class="col-xs-11">{{value}}</div>
+              </div>
+            </div>
+            <div class="row">
+              <div ng-hide="(responseApiShow == false)" ng-show="(responseApiShow == true)" class="col-xs-10 col-xs-offset-1">
+                <div class="table-responsive">
+                  <div class="col-xs-12">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <td><a ng-click="backObjectApi()" ng-disabled="apiCoord.length < 1" class="buttonPrevious btn btn-primary">Start</a></td>
+                          <td>Values coordinates: {{apiCoord}}</td>
+                        </tr>
+                      </thead>
+                      <tbody ng-repeat="(key,value) in responseApiBtc">
+                        <tr>
+                          <th scope="row">{{key}}</th>
+                          <td ng-click = nextKey(key) ng-mouseover="checkKeyType(key)" ng-class="{'cursorPointer':valueApi==true, 'cursorZoom':valueApi == false}">{{value}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+           <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback ">
+              <center>
+                <button id="btnsave" ng-disabled="links[0].link == co.links.one.linkCrip && links[0].coordinates == co.links.one.coordinates" ng-click="(affiliating)? saveApiLink(): updApiLink()" type="button" class="btn btn-info btn-sm" >Save</button>
+              </center>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

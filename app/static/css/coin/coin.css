@@ -1,0 +1,89 @@
+.dolar{
+	color:#43a047
+}
+
+.btc {
+	color:#ffeb3b
+}
+.azul{
+	color:#1ABB9C	;
+}
+.rojo{
+	color:#ff5252;
+}
+.verde{
+	color:#1de9b6;
+}
+.botonAddCoin{
+
+    padding: 15px;
+    border-radius: 25px;
+    border: 2px solid #ddd;
+    background-color: white;
+    font-size: 13px;
+
+}
+
+#btnAddCoin:hover{
+	background-color:yellow; 
+}
+
+.menuMonedas{
+	height: 430px;
+	overflow: auto;
+}
+
+.cursor{
+	cursor: pointer;
+	box-shadow: 2px 2px 5px #999;
+	border-radius: 5px;
+    border: 1px  #ddd;
+}
+.cursor:hover{
+	background-color:#e3f2fd  !important;
+}
+
+.ico-eliminar{
+	font-size: 15px;
+	z-index: 10000000;
+}
+
+.ico-eliminar:hover{
+	font-size: 15px;
+	color: red;
+	z-index: 1000000;
+}
+
+.azulTitle {
+    color: #337ab7;
+}
+.cursorPointer{
+	cursor: pointer;
+}
+.cursorZoom{
+	cursor: zoom-in;
+}
+.table-head{
+	text-align: center;
+	font-size: 15px;
+}
+.apis-title{
+	font-size: 25px;
+}
+.table-responsive{
+	margin-right: 18px;
+	margin-left: 12px;
+}
+#symbolCoin{
+	margin-top: 27px
+}
+#name_typeCoin{
+
+}
+#typeCoin{
+margin-left: 36px;
+}
+#btnsave{
+	width: 80px;
+	margin-right:50px;
+}

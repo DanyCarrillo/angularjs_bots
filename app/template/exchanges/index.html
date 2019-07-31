@@ -1,0 +1,12 @@
+{%extends 'base/base.html'%}
+{% block cssModule%}
+<link href="{{url_for('static',filename='css/apiUser/apiUser.css')}}" rel="stylesheet">
+{% endblock %}
+{% block content%}
+	<div  class="right_col" role="main" data-ng-view>
+         
+    </div>
+{% endblock %}
+{% block jsModule%}
+<script type="text/javascript" src="{{url_for('static',filename='js/apiUser/exchanges.js')}}" ></script>
+{% endblock %}

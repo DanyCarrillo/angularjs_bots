@@ -1,0 +1,142 @@
+
+
+.activeCell{
+-webkit-animation: resaltar 1.5s;
+-moz-animation: resaltar 1.5s;
+-o-animation: resaltar 1.5s;
+animation: resaltar 1.5s;
+}
+
+td{
+width: 25%;
+}
+th{
+width: 25%;
+}
+
+/* width scroll */
+.div_contenedor::-webkit-scrollbar{
+    width: 20px;
+}
+
+/* Track scroll */
+.div_contenedor::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey; 
+    border-radius: 10px;
+}
+ 
+/* Handle scroll */
+.div_contenedor::-webkit-scrollbar-thumb {
+    background: #bfbfbe; 
+    border-radius: 10px;
+}
+
+/* Handle on hover scroll*/
+.div_contenedor::-webkit-scrollbar-thumb:hover {
+    background: #d6d6d6; 
+}
+
+.div_contenedor{
+  color:#828486;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  white-space: nowrap;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  margin-bottom: 0px;
+}
+
+#container{
+	margin-top: 0;
+	font-size: 67%;
+  display: inline-block;
+  border:2px solid #f7f7f7;;
+  width: 30%;
+  height: 100%;
+  position: relative;
+  min-height: 500px;
+  margin-bottom: 0px;
+
+}
+.table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th {
+  background-color: #c7c7c4;
+  color:#828486;
+}
+
+#sell{
+color: #b55760;
+}
+#buy{
+color:#50947d;
+}
+.page-title{
+	margin-bottom: 0;
+}
+
+#spinner{
+    margin-top: 100px;
+    margin-left: 520px;
+    margin-bottom:100px;
+    width: 100px;
+    height: 100px;
+}
+#loading{
+    font-size: 100px;color: #2b3f54;
+}
+#title_general{
+  color:#2a3f54;
+}
+.volumen{
+  background: white;
+  padding: 3px;
+  margin-top: 7px;
+  border-radius: 5px;
+  color:black;
+  margin-bottom: 10px;
+}
+.par{
+  font-size: 20px;
+  margin-top: 5px;
+  margin-left:10px;
+}
+
+@-webkit-keyframes resaltar {
+0% {
+background: rgba(203, 200, 200, .5);
+}
+
+100% {
+background: rgba(203, 200, 200, 0);
+}
+}
+
+@-moz-keyframes resaltar {
+0% {
+background: rgba(203, 200, 200, .5);
+}
+
+100% {
+background: rgba(203, 200, 200, 0);
+}
+}
+
+@-o-keyframes resaltar {
+0% {
+background: rgba(203, 200, 200, .5);
+}
+
+100% {
+background: rgba(203, 200, 200, 0);
+}
+}
+
+@keyframes resaltar {
+0% {
+background: rgba(203, 200, 200, .5);
+}
+
+100% {
+background: rgba(203, 200, 200, 0);
+}
+}

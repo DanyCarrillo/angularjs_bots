@@ -1,0 +1,160 @@
+<div class="container containerPackages">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="divCountries">
+                <div class="page-header">
+                    <h1>Paises</h1>
+                </div>
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default" ng-repeat="country in countries">
+                        <div class="panel-heading collapsed" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{country.name}}" aria-expanded="false" aria-controls="collapse{{country.name}}">
+                            {{country.name}}
+                            </a>
+                        </h4>
+                        </div>
+                        <div id="collapse{{country.name}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapse{{country.name}}">
+                        <div class="panel-body">
+                            <div class="list-group" ng-repeat="coins in country.monedas">
+                                <button type="button" class="list-group-item" ng-click="getPackages(coins.id_coin_fiat, coins.id_criptocoin)">{{coins.name_coin_fiat}}-{{coins.name_criptocoin}}</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>                  
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="divPackages">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <h1 class="titlePackages">Paquetes</h1>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="divAddPackage">
+                            <i class="fa fa-plus iconAddPackage" aria-hidden="true" data-toggle="modal" data-target=".bs-example-modal-sm" ng-click="openModal()"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion" id="accordionPackages" role="tablist" aria-multiselectable="true">
+                      <div class="panel" ng-repeat="package in packages">
+                        <a class="panel-heading collapsed" role="tab" id="accPack" >
+                          <div class="row">
+                              <div class="col-lg-offset-2 col-lg-8">
+                                    <h4 class="titlePackage">Precio: {{package.price}}$</h4>
+                              </div>
+                              <div class="col-lg-2">
+                               <button type="submit" class="btn blue-sweet" data-toggle="modal" data-target=".bs-example-modal-sm" ng-click="packageSelection(package, $index)">Crear transacción</button>
+                              </div>
+                          </div>
+                          
+                          <table class="table">
+                              <thead>
+                                <tr>
+                                  <th>Paquete</th>
+                                  <th>Disponible</th>
+                                  <th>Vendidos</th>
+                                  <th>Bloqueados</th>
+                                  <th>Total</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <th scope="row">{{package.id}}</th>
+                                  <td>{{package.available}}</td>
+                                  <td>{{package.sold}}</td>
+                                  <td>{{package.pending_sell}}</td>
+                                  <td>{{package.total}}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <div class="row">
+                                <center>
+                                    <i data-toggle="collapse" data-parent="#accordionPackages" href="#p-{{package.id}}" aria-expanded="false" aria-controls="p-{{package.id}}" ng-click="getTransactionPackages(package.id)" class="fa fa-angle-down angle-down" aria-hidden="true" id="but-{{package.id}}"></i>
+                                </center>
+                            </div>
+                        </a>
+                        <div id="p-{{package.id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                          <div class="panel-body scroll">
+                            <table class="table table-bordered">
+                              <thead>
+                                <tr>
+                                  <th>Id</th>
+                                  <th>Actor</th>
+                                  <th>Saldo</th>
+                                  <th>Monto</th>
+                                  <th>Total</th>
+                                  <th>Tipo</th>
+                                  <th>Descripción</th>
+                                  <th>Fecha</th>
+                                </tr>
+                              </thead>
+                              <tbody ng-repeat="transaccionD in transactionsDetails">
+                                <tr >
+                                  <th scope="row">{{transaccionD.id}}</th>
+                                  <td ><span class="label" ng-class="(transaccionD.bot == true)?'label-primary':'label-purple'" ng-bind="transaccionD.actor"></span></td>
+                                  <td>{{transaccionD.quantity_old}}</td>
+                                  <td>{{transaccionD.quantity}}</td>
+                                  <td ng-bind="(transaccionD.total)"></td>
+                                  <td ng-bind="(transaccionD.type == 'S')?'Venta':'Compra'">{{transaccionD.type}}</td>
+                                  <td>{{transaccionD.description}}</td>
+                                  <td>{{transaccionD.dat_create}}</td>                                  
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="closeModal" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel2" ng-bind="(modalModif)?'Modificar Paquete ' + packageSelected.price:'Añadir Paquete'"></h4>
+            </div>
+            <div class="modal-body">
+                <form ng-submit="formNewPackage()" class="form-horizontal form-label-left input_mask">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <select ng-disabled="(modalModif)?true:false" id="selectCripto" class="form-control" ng-model="newPackage.id_criptocoin">
+                            <option value="">Elija Criptomoneda</option>
+                            <option ng-repeat="criptoCoin in criptoCoins" ng-value="{{criptoCoin.id}}">{{criptoCoin.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <select ng-disabled="(modalModif)?true:false" id="selectFIAT" class="form-control selectCoinModal" ng-model="newPackage.id_coin_fiat">
+                            <option value="">Elija Moneda</option>
+                            <option ng-repeat="fiatCoin in fiatCoins" ng-value="{{fiatCoin.id}}">{{fiatCoin.name}}({{fiatCoin.name_country}})</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control has-feedback-left" id="amountNewPackage" placeholder="Cantidad" ng-model="newPackage.amount_order">
+                        <span class="fa fa-money form-control-feedback left" aria-hidden="true"></span>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                        <input ng-disabled="(modalModif)?true:false" type="text" class="form-control has-feedback-left" id="priceNewPackage" placeholder="Precio" ng-model="newPackage.price">
+                        <span class="fa fa-usd form-control-feedback left" aria-hidden="true"></span>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                    <textarea class="form-control" rows="3" placeholder='Descripcion' id="descriptionNewPackage" ng-model="newPackage.description"></textarea>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group" ng-show="(modalModif)" style="top:10px;">
+                        <center>
+                            <div ng-click="addTransaction()" class="btn-group">
+                                <label class="btn btn-danger" ng-model="newPackage.type" uib-btn-radio="'S'" >Debitar</label>
+                                <label class="btn btn-primary" ng-model="newPackage.type" uib-btn-radio="'B'" >Acreditar</label>
+                            </div>
+                        </center>
+                    </div>
+                    <button ng-hide="(modalModif)" class="btn btn-primary modal-btn-save">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

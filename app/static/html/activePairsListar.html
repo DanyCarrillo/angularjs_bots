@@ -1,0 +1,145 @@
+<br><br>
+<div class="">
+    <button ng-click="topFunction()" id="myBtn" title="Go to top">Top</button>           
+      <!----------------------------------- Title ----------------------------------->
+    <div class="page-title">
+        <div class="title_left">
+            <center><h4 ng-style="{color:'#566675'}">Pair's</h3></center>
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12  pull-right top_search">
+                    <input type="text" class="form-control" ng-model="filterPair" placeholder="Search">
+                    <span class="input-group-btn">
+                    </span>
+            </div>
+        </div> 
+    </div>
+    <!----------------------------------- End Title ----------------------------------->
+
+    <!----------------------------------- ROW ----------------------------------->
+    <div id="row1" class="row">
+          <!-- Begin Precios -->
+        <div class="col-md-12 col-sm-12 col-xs-12" >
+             <div class="x_panel">
+            <div id="container" class="x_content table-responsive">
+                <div class="col-md-3 col-sm-3 col-xs-3 "ng-style="{'border-right':'1px solid #e5e5e5'}">
+                    <label class="control-label">Pairs:</label>
+                    <select ng-disabled="(isDisabled_usersSelect==true)? true:false"class="list-group-item list-group-item-action" ng-model="ngPair.id_pair" ng-change="selMarketPricesExchange(ngPair.id_pair)" ng-options="pair.id_pair as pair.pair for pair in listPairs" tabindex="100">
+                        <option value="" selected disabled>---Select---</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 col-sm-3 col-xs-3" ng-style="{'border-right':'1px solid #e5e5e5'}">
+                    <center>
+                        <label>External buy Price:</label>
+                        <br>
+                        <i class="fa fa-spinner fa-spin" ng-style="waiting==true?{'display':'inline-block','font-size':'32px'}:{'display':'none'}"></i>
+                        <span class="glyphicon glyphicon-usd" ng-style="waiting==false?{'display':'inline-block',color:'#60ba9b'}:{'display':'none'}">
+                        </span>    
+                        <h4  ng-style="waiting==false?{'display':'inline-block',color:'#60ba9b'}:{'display':'none'}" ng-bind="(ngPriceMarket.buyMarketPrice>0 )? ngPriceMarket.buyMarketPrice:0">
+                        </h4>
+                    </center>
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-3" ng-style="{'border-right':'1px solid #e5e5e5'}">
+                    <center>
+                        <label>External sell Price:</label>
+                        <br>
+                        <i class="fa fa-spinner fa-spin" ng-style="waiting==true?{'display':'inline-block','font-size':'30px'}:{'display':'none'}" ></i>
+                          <span class="glyphicon glyphicon-usd" ng-style="waiting==false?{'display':'inline-block',color:'#d9534f'}:{'display':'none'}">
+                        </span> 
+                        <h4 ng-style="waiting==false?{'display':'inline-block',color:'#d9534f'}:{'display':'none'}" ng-bind="(ngPriceMarket.sellMarketPrice)>0 ? ngPriceMarket.sellMarketPrice:0">
+                        </h4>
+                    </center>
+                </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3">
+                    <center>
+                        <label>Activate / Inactivate Pairs:</label>
+                        <br>
+                           <button id="boton" type="button" class="btn" ng-click="confiActivateAll()" title="Activate pairs">Activate</button>
+                            <button id="boton_inactivate" type="button" class="btn" ng-click="confirmarInactivateAll()" title="Inactivate pairs">Inactivate</button>
+                    </center>
+                    </div>
+                    </div>
+                </div>
+        </div>
+
+    </div>
+
+    <div id="row2" class="row" >
+    <!----------------------------------- Columna 1 ----------------------------------->
+         <div class="col-md-12 col-sm-12 col-xs-6">
+        <div class="x_panel">
+            <div id="container" class="x_content table-responsive">
+
+                <table class="table table-hover " ng-show="loading==false">
+                    <thead>
+                        <tr >
+                            <th ng-repeat="(i,th) in head" ng-class="selectedCls(i)" ng-click="changeSorting(i)">{{th}}
+                            </th>
+                            <th>
+                                #Bots Active
+                            </th>
+                            <th>Buy</th>
+                            <th>Sell</th>
+                            <th>External Price</th>
+                            <th>
+                                Options
+                            </th>
+
+
+                            <th>
+                                <label class="labelcheckbox">
+                                <input id="checked" type="checkbox" ng-model="checkall" ng-click="toggleSelect()" /><span class="label-text"></span> </label>Select All
+                            </th>
+                    </thead>
+                    <tbody>
+                        <tr class="activeCell" ng-repeat="par in ($parent.pares_filtrados=(listPairs|filter:filterPair))|orderBy:sort.column:sort.descending">
+                        <td >{{par.id_pair}}</td>
+                        <td >{{par.pair}}</td>
+                        <td >
+                            <span ng-bind="(par.status_id=='Active')?'Active':'Inactive'"ng-class="(par.status_id=='Active')?'label label-info':'label label-warning'"></span>
+                        </td>
+                        <td >{{par.created_date}}</td>
+                        <td >{{par.modified_date}}</td>
+                        <td>{{par.cant_bots}}</td>
+                        <td><span id="dolar_td"ng-style="{'display':'inline-block',color:'#60ba9b'}">$ {{par.buy_marketprice}} </span></td>
+                        <td><span id="dolar_td"ng-style="{'display':'inline-block',color:'#d9534f'}">$ {{par.sell_marketprice}}
+                        </span> </td>
+                        <td><a class="btn btn-default glyphicon glyphicon-eye-open" ng-click="selMarketPricesView(par.id_pair)" id="myBtnVerMarketprice" title="View Market Price"></a> </td>
+                         <td>
+                                <div class="btn-group">
+                                  
+                                    <button title="Inactivate pair"id="boton_inactivate" ng-if="(par.status_id=='Active')" type="button" class="btn btn-xs" ng-click="confiInactivePair(par)">Inactivate
+                                    </button>
+                                     <button title="Activate pair"id="boton"ng-if="(par.status_id=='Inactive')" type="button" class="btn btn-xs" ng-click="confiActivatePair(par)">Activate
+                                    </button>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-check">
+                                <label class="labelcheckbox">
+                                <input  class="check"
+                                id="checked" type="checkbox" value="{{par.id_pair}}" ng-click="toggleSelection(par)" ng-model="model_checkall"/>
+                                <span class="label-text"></span>
+                                </label>
+                                <i name="{{id_pair}}"class="fa fa-spinner fa-spin " ng-style="waitingCheckbox==true?{'display':'inline-block','font-size':'22px'}:{'display':'none'}" >
+
+                                </i>
+                                </div>
+
+                            </td>
+                    </tr>
+                    </tbody>
+                </table>
+<!----------------------------------- Spinner ----------------------------------->
+                <div id="spinner" ng-show="loading">
+                    <i id="loading" class="fa fa-spinner fa-spin"></i>
+                </div>
+<!----------------------------------- End Spinner ----------------------------------->
+            </div>
+            </div>
+    </div>
+
+    </div>
+<!----------------------------------- End ROW ----------------------------------->
+</div>

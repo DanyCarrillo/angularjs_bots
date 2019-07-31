@@ -1,0 +1,522 @@
+<br><br>
+<div class="">
+    <div class="page-title">
+        <div class="title_left">
+            <h3 class='azulTitle'>Exchanges administrator</h3>
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                <div class="input">
+                    <input type="text" class="form-control ng-valid ng-not-empty ng-dirty ng-valid-parse ng-touched" ng-model="filterApiUser" placeholder="Buscar Exchange">
+                    <span class="input-group-btn">
+                        <!-- <button class="btn btn-default" type="button">Search</button> -->
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <h2>Exchanges
+                                <small>Allowed to bot configurations</small>
+                            </h2>
+                        </div>
+                        <div class="col-md-2 col-sm-2 col-xs-2">
+                            <div class="pull-right">
+                                <label>
+                                    <input ng-change="cambiarLista()" type="checkbox" id="swich2" ng-model="switchVerTodos" class="js-switch"/>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-2 col-xs-2">
+                            <span ng-style="{'color': '#fff'}" class="pull-left "
+                                ng-bind="(switchVerTodos==false)?'Ver todos los Api Users':' Show all exchanges'"
+                                ng-class="(switchVerTodos==true)?'label label-default':'label label-info'"></span>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2 col-xs-2">
+                            <button type="button" class="btn btn-round btn-success btn-xs" data-toggle="modal" data-target=".bs-example-modal-md" ng-click="exchangeModal('A')">
+                                    Add Exchange
+                            </button>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="x_content">
+                    <table class="table table-hover" ng-show="loading==false">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Exchange</th>
+                                <th>Type</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th ng-show='listDue'>Master</th>
+                                <th>Options</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+
+                            <tr ng-repeat="ex in exchanges | filter:filterApiUser">
+                                <th ng-bind="ex.general.idExchange" scope="row"></th>
+                                <td ng-bind="ex.general.name"></td>
+                                <td ng-bind="(ex.general.type=='I')?'Internal':'External'"></td>
+                                <td ng-bind="ex.general.priority"></td>
+                                <td>
+                                    <span ng-bind="(ex.general.status==1 || ex.general.status=='active')?'Active':'Inactive'" ng-class="(ex.general.status==1 || ex.general.status=='active')?'label label-info':'label label-warning'"></span>
+                                </td>
+                                <td ng-show='listDue' ng-bind='au.name_user'></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-success btn-xs">Acctions</button>
+                                        <button type="button" class="btn btn-success dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">
+                                            <span class="caret"></span>
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li>
+                                                <a href="#" data-toggle="modal" data-target=".bs-example-modal-md" ng-click="exchangeModal('M',ex,$index)">Update</a>
+                                            </li>
+                                            <li>
+                                                <a ng-click="exchangeModal('D',ex,$index)">Delete</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <div id="spinner" ng-show="loading">
+                     <i id="loading" class="fa fa-spinner fa-spin"></i>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- BEGIN MODAL -->
+<div class="modal fade bs-example-modal-md" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+
+            <!-- BEGIN MODAL HEADER -->            
+            <div class="modal-header" ng-style="styleWeb">
+                <button id='botonCerrarModal' type="button" class="close" data-dismiss="modal" ng-style="{'color':'white'}">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" ng-bind="modalTitle" id="myModalLabel" ng-style="{'color':'white'}"></h4>
+            </div>
+            <!-- END MODAL HEADER -->
+
+            <!-- BEGIN MODAL BODY -->
+            <div class="modal-body">
+
+                <!-- BEGIN FORMULARIO -->
+                <form name="EXForm" class="form-horizontal form-label-left input_mask">
+                    <div class="x_panel">
+                        <div class="x_content">
+
+                            <!-- BEGIN SECTION EXCHANGE -->
+                            <div class="row">
+                                
+
+                                <!-- Begin select name Exchnage -->
+                                <div class="col-md-4 col-sm-4 col-xs-4 form-group has-feedback" ng-show="show_selectExchange">
+                                    <label class="control-label">Select Exchange
+                                        <span class="required"> </span>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback" ng-show="show_selectExchange">
+                                    <select class="form-control has-feedback-left" ng-model="exchange.general.seleccionado" tabindex="100" name="exSeleccionado" ng-change="showExchangeSelect(exchange.general.seleccionado)"
+                               ng-style="{'background-color': exchange.general.seleccionado.length>0 ? bgValid : bgInvalid}">
+                                        <option value="" selected disabled>-----Select-----</option>
+                                         <option value="{{ex.idExchange}}"ng-repeat="ex in salidaExchangeSelect">{{ex.name}}</option>
+                                         <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <!-- /End select name Exchnage -->
+
+
+                                <!-- Begin Type Exchange -->
+                                <div class="col-md-4 col-sm-4 col-xs-4 form-group has-feedback" ng-show="showEchange">
+                                    <label class="control-label"> Exchange type</label>
+                                </div>
+                                <div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback"ng-show="showEchange">
+                                    <select class="form-control has-feedback-left" ng-options="et.key as et.value for et in exchange_types" data-ng-model="exchange.general.tipo" tabindex="100" name="exType" ng-style="{'background-color': exchange.general.tipo.length==1 ? bgValid : bgInvalid}" ng-disabled="isDisabledTypeExchange">
+                                        <option value="" selected disabled>-----Select-----</option>
+                                    </select>
+                                </div>
+                                <!-- End Type Exchange -->
+
+                                <!-- Begin Priority Exchange -->
+                                <div class="col-md-4 col-sm-4 col-xs-4 form-group has-feedback"ng-show="showEchange">
+                                    <label class="control-label left">Priority
+                                        <span class="required"> </span>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback" ng-show="showEchange">
+                                    <input type="number" ng-model="exchange.general.prioridad" class="form-control has-feedback-left" placeholder="Priority [0-127]" name="exPriority" min="0" max="127" ng-style="{'background-color': (exchange.general.prioridad>0 && exchange.general.prioridad<=127)? bgValid : bgInvalid}">
+                                </div>
+                                <!-- End Priority Exchange -->
+
+
+
+
+
+                                                                <!-- Begin Nombre Exchange -->
+                                <div class="col-md-4 col-sm-4 col-xs-4 form-group has-feedback" ng-show="showOtherEchange" >
+                                    <label class="control-label">Exchange
+                                        <span class="required"> </span>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback" ng-show="showOtherEchange" >
+                                    <input type="text" ng-model="exchange.general.nombre" class="form-control  has-feedback-left" placeholder="Exchange name" name="exName" ng-style="{'background-color': exchange.general.nombre.length>0 ? bgValid : bgInvalid}" ng-disabled="isDisabled">
+                                </div>
+                                <!-- End Nombre Exchange -->
+
+                                <!-- Begin Type Exchange -->
+                                <div class="col-md-4 col-sm-4 col-xs-4 form-group has-feedback" ng-show="showOtherEchange" >
+                                    <label class="control-label"> Exchange type</label>
+                                </div>
+                                <div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback" ng-show="showOtherEchange" >
+                                    <select class="form-control has-feedback-left" ng-options="et.key as et.value for et in exchange_types" data-ng-model="exchange.general.tipo" tabindex="100" name="exType" ng-style="{'background-color': exchange.general.tipo.length==1 ? bgValid : bgInvalid}">
+                                        <option value="" selected disabled>-----Select-----</option>
+                                    </select>
+                                </div>
+                                <!-- End Type Exchange -->
+
+                                <!-- Begin Priority Exchange -->
+                                <div class="col-md-4 col-sm-4 col-xs-4 form-group has-feedback" ng-show="showOtherEchange">
+                                    <label class="control-label left">Priority
+                                        <span class="required"> </span>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 col-sm-8 col-xs-8 form-group has-feedback" ng-show="showOtherEchange" >
+                                    <input type="number" ng-model="exchange.general.prioridad" class="form-control has-feedback-left" placeholder="Priority [0-127]" name="exPriority" min="0" max="127" ng-style="{'background-color': (exchange.general.prioridad>0 && exchange.general.prioridad<=127)? bgValid : bgInvalid}">
+                                </div>
+                                <!-- End Priority Exchange -->
+
+
+
+
+                                <!--<h5>{{exchange.general}}</h5>-->
+
+                            </div>
+                            <!-- END SECTION EXCHANGE -->
+
+
+                            <!-- BEGIN SECTION USER -->
+                            <div class="row">
+                                <div class="widget">
+
+                                    <div class="widget-title" data-target="#add_user" data-toggle="collapse">
+                                        <h4><span class="glyphicon glyphicon-user" ng-style="styleTextWeb"></span>Add User</h4>
+                                        <span class="glyphicon glyphicon-menu-down right" ng-style="styleTextWeb"></span>
+                                    </div>
+
+                                    <div class="widget-body" ng-style="{'padding-bottom':'0px','padding-top':'0px'}">
+                                        <div id="add_user" class="panel-body collapse">
+
+                                            <!-- Begin Username -->
+                                            <div class="row">
+                                                <div class="col-md-3 col-sm-3 col-xs-3 form-group has-feedback">
+                                                    <label class="control-label">Username</label>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6 col-xs-6 form-group has-feedback">
+                                                    <input type="text" ng-model="user.username" class="form-control has-feedback-left" name="usUsername" placeholder="Username" ng-style="{'background-color': (user.username.length>0 || counter_usu>0) ? bgValid:bgInvalid}">
+                                                </div>
+
+                                                <div class="col-md-3 col-sm-3 col-xs-3">
+                                                    <div class="btn-group" role="group">
+                                                        <button type="submit" class="btn btn-sm" ng-click="addmodUser()" ng-style="styleWeb" ng-disabled="(user.username.length>0 && user.credentials.secret.length>0 && user.credentials.key.length>0 && counter_pair>0) ? false : true">
+                                                            <span class="glyphicon glyphicon-ok" ng-style="{'color':'white'}"></span>
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm" ng-click="delUser(user.username)" ng-style="styleWeb">
+                                                            <span class="glyphicon glyphicon-minus" ng-style="{'color':'white'}"></span>
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm" ng-click="cleanModelUser()" ng-style="styleWeb">
+                                                            <span class="glyphicon glyphicon-erase" ng-style="{'color':'white'}"></span>
+                                                        </button>
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                            <!-- End Username -->
+                                        
+                                            <!-- Begin Api secret -->
+                                            <div class="row">
+                                                <div class="col-md-3 col-sm-3 col-xs-3 form-group has-feedback">
+                                                    <label class="control-label">Api secret</label>
+                                                </div>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 form-group has-feedback">
+                                                    <input type="text" ng-model="user.credentials.secret" class="form-control  has-feedback-left" name="usApiSecret" placeholder="Api secret" ng-style="{'background-color': (user.credentials.secret.length>0 || counter_usu>0) ? bgValid:bgInvalid}">
+                                                </div>
+                                            </div>
+                                            <!-- End Api secret -->
+
+                                            <!-- Begin Api key -->
+                                            <div class="row">
+                                                <div class="col-md-3 col-sm-3 col-xs-3 form-group has-feedback">
+                                                    <label class="control-label">Api key</label>
+                                                </div>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 form-group has-feedback">
+                                                    <input type="text" ng-model="user.credentials.key" class="form-control has-feedback-left" name="usApiKey" placeholder="Api key" ng-style="{'background-color': (user.credentials.key.length>0 || counter_usu>0) ? bgValid:bgInvalid}">
+                                                </div>
+                                            </div>
+                                            <!-- End Api key -->
+
+
+                                            <!-- Begin Pair -->
+                                            <div class="row">
+                                                <div class="col-md-3 col-sm-3 col-xs-3 form-group has-feedback">
+                                                    <label class="control-label">Pairs</label>
+                                                </div>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 form-group has-feedback">
+
+                                                    <!-- Begin Widget User Pairs -->
+                                                    <div class="widget">
+                                                        <div class="widget-title" data-target="#add_pair" data-toggle="collapse">
+                                                            <h4><span class="glyphicon glyphicon-duplicate" ng-style="styleTextWeb"></span>Add User Pairs</h4>
+                                                            <span class="glyphicon glyphicon-menu-down right" ng-style="styleTextWeb"></span>
+                                                        </div>
+
+                                                        <!-- Begin Widget-Body -->
+                                                        <div class="widget-body" ng-style="{'padding-bottom': '0px', 'padding-top': '0px'}">
+                                                            <div id="add_pair" class="panel-body collapse">
+                                                                <div class="row">
+
+                                                                    <div class="col-md-10 col-sm-10 col-xs-10 form-group has-feedback">
+                                                                        <div class="row">
+                                                                            <div class="col-md-3 col-sm-3 col-xs-3 form-group has-feedback">
+                                                                                <label class="control-label" for="first-name">Pair</label>
+                                                                            </div>
+                                                                            <div class="col-md-9 col-sm-9 col-xs-9 form-group has-feedback">
+                                                                                <select class="form-control" ng-model="paircoin.idPair" ng-options="p.idPair as p.pair for p in pairs" tabindex="100" name="usNamePair" ng-style="{'background-color': (paircoin.idPair>0 || counter_pair>0) ? bgValid:bgInvalid}">
+                                                                                    <option value="" disabled>-----Select-----</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row">
+                                                                            <div class="col-md-3 col-sm-3 col-xs-3 form-group has-feedback">
+                                                                                <label class="control-label">Amount</label>
+                                                                            </div>
+                                                                            <div class="col-md-9 col-sm-9 col-xs-9 form-group has-feedback">
+                                                                                <input type="number" ng-model="paircoin.maxTradeAmount" class="form-control" name="usMaxAmountPair" placeholder="Amount" min="0" ng-style="{'background-color': (paircoin.maxTradeAmount>0 || counter_pair>0) ? bgValid:bgInvalid}">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-2 col-sm-2 col-xs-2 form-group has-feedback">
+                                                                        <div class="btn-group-vertical" role="group">
+                                                                            <button type="button" class="btn btn-sm" ng-click="addmodUserPair()" ng-style="styleWeb" ng-disabled="(paircoin.maxTradeAmount>0 && paircoin.idPair>0) ? false : true">
+                                                                                <span class="glyphicon glyphicon-ok" ng-style="{'color': 'white'}"></span>
+                                                                            </button>
+                                                                            <button type="button" class="btn btn-sm" ng-click="delUserPair(paircoin.idPair)" ng-style="styleWeb">
+                                                                                <span class="glyphicon glyphicon-minus" ng-style="{'color': 'white'}"></span>
+                                                                            </button>
+                                                                            <button type="button" class="btn btn-sm" ng-click="cleanModeluserPair()" ng-style="styleWeb">
+                                                                                <span class="glyphicon glyphicon-erase" ng-style="{'color':'white'}"></span>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- End Widget Body -->
+
+                                                        <div class="widget-footer">
+                                                            <h4>Pairs: {{counter_pair}}</h4>
+                                                            <h4 ng-repeat="p in angular_userpairs track by $index"><a href="" ng-click="showUserPair(p.idPair)">{{p.pair}}</a></h4>
+
+                                                            <!--<h5>{{paircoin}}</h5>-->
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Widget User Pairs -->
+
+
+                                                    <!--<h1>{{angular_pair}}</h1>-->
+
+
+                                                </div>
+                                            </div>
+                                            <!-- End Pair -->
+
+                                        </div>
+                                    </div>
+
+                                    <div class="widget-footer">
+                                        <h4>Users: {{counter_usu}}</h4>
+                                        <h4 ng-repeat="u in angular_users track by $index"><a href="" ng-click="showUser(u.username)">{{u.username}}</a></h4>
+
+                                        <!--<h5>{{user}}</h5>-->
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- END SECTION USER -->
+
+
+                            <!-- BEGIN SECTION APILINK -->
+                            <div class="row" ng-show="show_form">
+                                <div class="widget">
+
+                                    <div class="widget-title" data-target="#add_apilink" data-toggle="collapse">
+                                        <h4><span class="glyphicon glyphicon-globe" ng-style="styleTextWeb"></span>Add ApiLink</h4>
+                                        <span class="glyphicon glyphicon-menu-down right" ng-style="styleTextWeb"></span>
+                                    </div>
+
+                                    <div class="widget-body" ng-style="{'padding-bottom': '0px', 'padding-top': '0px'}">
+                                        <div id="add_apilink" class="panel-body collapse">
+
+
+                                            <!-- Begin Trade Type -->
+                                            <div class="row" ng-show="show_form">
+                                                <div class="col-md-3 col-sm-3 col-xs-3 form-group has-feedback">
+                                                    <label class="control-label" for="first-name">Format</label>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6 col-xs-6 form-group has-feedback">
+                                                    <select class="form-control has-feedback-left" ng-model="apilink.format" ng-options="format.idFormat as format.name for format in formats" tabindex="100" ng-style="{'background-color': (apilink.format.length>0 || counter_link>1) ? bgValid : bgInvalid}">
+                                                        <option value="" selected disabled>-----Select-----</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-3 col-sm-3 col-xs-3">
+                                                    <div class="btn-group" role="group">
+                                                        <button type="button" class="btn btn-sm" ng-click="addmodApiLink()" ng-style="styleWeb" ng-disabled="(apilink.format.length>0 && apilink.url.length>0 && apilink.method.length>0 && apilink.params.length>0 && apilink.datatype.length>0) ? false:true">
+                                                            <span class="glyphicon glyphicon-ok" ng-style="{'color': 'white'}"></span>
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm" ng-click="delApiLink(apilink.reference)" ng-style="styleWeb">
+                                                            <span class="glyphicon glyphicon-minus" ng-style="{'color': 'white'}"></span>
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm" ng-click="cleanModelApiLink()" ng-style="styleWeb">
+                                                            <span class="glyphicon glyphicon-erase" ng-style="{'color': 'white'}"></span>
+                                                        </button>
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                            <!-- End Trade Type -->
+
+                                            <!-- Begin URL -->
+                                            <div class="row" ng-show="show_form">
+                                                <div class="col-md-3 col-sm-3 col-xs-3 form-group has-feedback">
+                                                    <label class="control-label" for="first-name">URL</label>
+                                                </div>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 form-group has-feedback">
+                                                    <input type="text" ng-model="apilink.url" class="form-control has-feedback-left" name="url" placeholder="Url" ng-style="{'background-color': (apilink.url.length>0 || counter_link>1) ? bgValid:bgInvalid}">
+                                                </div>
+                                            </div>
+                                            <!-- End URL -->
+
+                                            <!-- Begin Method -->
+                                            <div class="row" ng-show="show_form">
+                                                <div class="col-md-3 col-sm-3 col-xs-3 form-group has-feedback">
+                                                    <label class="control-label" for="first-name">Method</label>
+                                                </div>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 form-group has-feedback">
+                                                    <select class="form-control has-feedback-left" ng-model="apilink.method" ng-options="am as am for am in apilink_methods" tabindex="100" name="aplnkMethod" ng-style="{'background-color': (apilink.method.length>0 || counter_link>1) ? bgValid : bgInvalid}">
+                                                        <option value="" disabled>-----Select-----</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <!-- End Method -->
+
+                                            <!-- Begin Params -->
+                                            <div class="row" ng-show="show_form">
+                                                <div class="col-md-3 col-sm-3 col-xs-3 form-group has-feedback">
+                                                    <label class="control-label" for="first-name">Params
+                                                        <span class="required"> </span>
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-9 col-sm-9 col-xs-9 form-group has-feedback">
+                                                    <textarea class="form-control has-feedback-left" ng-model="apilink.params" name="params" placeholder="Params" ng-style="{'background':(apilink.params.length>0 || counter_link>1) ? bgValid:bgInvalid}"></textarea>
+                                                </div>
+                                            </div>
+                                            <!-- End Params -->
+
+                                            <!-- Begin Data type -->
+                                            <div class="row" ng-show="show_form">
+                                                <div class="col-md-3 col-sm-3 col-xs-3 form-group has-feedback">
+                                                    <label class="control-label" for="first-name">Data type
+                                                        <span class="required"> </span>
+                                                    </label>
+                                                </div>
+
+                                                <div class="col-md-9 col-sm-9 col-xs-9 form-group has-feedback">
+                                                    <select class="form-control has-feedback-left" ng-model="apilink.datatype" ng-options="ad as ad for ad in apilink_datatypes" tabindex="100" name="aplnkDataType" ng-style="{'background-color': (apilink.datatype.length>0 || counter_link>1) ? bgValid : bgInvalid}">
+                                                        <option value="" disabled>-----Select-----</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <!-- End Data type -->
+
+                                        </div>
+                                    </div>
+
+                                    <div class="widget-footer">
+                                        <h4>Api Links: {{counter_link}}</h4>
+
+                                        <h4 ng-repeat="al in angular_apilinks track by $index"><a ng-show="show_form" href="" ng-click="showApiLink(al.reference)">{{al.format}}</a>
+                                        <!--<h5>{{apilink}}</h5>-->
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div ng-show="(show_selectExchange==true)?mensaje:false" ng-style="{'color':'red'}">
+                                        <span>* {{mensajes}} </span>    
+                            </div>
+                            <!-- END SECTION APILINK -->
+
+                            
+                            <!-- BEGIN SECTION SWITCH ACTIVE/INACTIVE -->
+                            <div ng-show='modApiUser'>
+                                <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6 col-xs-6 form-group has-feedback">
+                                            <div class="pull-right">
+                                                <label>
+                                                    <input type="checkbox" id="swich1" ng-model="switchStatus" class="js-switch"/>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-4 col-xs-4 has-feedback ">
+                                            <span class="pull-left " ng-bind="(switchStatus==false)?'Inactivo':'Activo'" ng-class="(switchStatus==false)?'label label-warning':'label label-info'"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END SECTION SWITCH ACTIVE/INACTIVE -->
+
+
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORMULARIO -->
+
+
+            </div>
+            <!-- END MODAL BODY -->
+
+            <!-- BEGIN MODAL FOOTER -->
+            <div class="modal-footer" ng-style="styleWeb">
+                <!--<button ng-click="verJSONExchange()" type="submit" class="btn btn-danger" ng-style="{'font-weight': 'bold'}">Ver JSON</button>-->
+
+                <button ng-click="(modExchange)?updExchange():addExchange()" type="submit" class="btn btn-primary" ng-style="{'font-weight': 'bold'}" ng-disabled="(counter_usu>0 && counter_link>1 )||( exchange.general.seleccionado!='Other' && counter_usu>0 ) ? false:true">
+                    Save
+                </button>
+            </div>
+            <!-- END MODAL FOOTER -->
+
+        </div>
+    </div>
+</div>
